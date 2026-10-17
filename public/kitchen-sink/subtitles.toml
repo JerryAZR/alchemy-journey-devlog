@@ -1,0 +1,76 @@
+# Introduction
+# intro.first is a title beat: the title is on screen, so no subtitle band
+[[lines]]
+id = "intro.first"
+text = "Welcome to the clip engine demo."
+subtitle = false
+
+[[lines]]
+id = "intro.second"
+text = "Narration drives the entire timeline."
+
+# Core concepts
+[[lines]]
+id = "concepts.clips"
+text = "Clips are modular visual blocks placed in rectangles."
+
+[[lines]]
+id = "concepts.timing"
+text = "They start and end anchored to narration lines."
+
+[[lines]]
+id = "concepts.span"
+text = "And a single clip can span as many lines as it needs."
+
+# Code clips
+[[lines]]
+id = "code.intro"
+text = "A code clip follows a file as it evolves, one morph at a time."
+
+[[lines]]
+id = "code.chain"
+text = "And a later clip picks up exactly where the previous one left off."
+
+# Showcase
+[[lines]]
+id = "showcase.terminal"
+text = "The terminal clip types commands and reveals their output, deterministically."
+
+[[lines]]
+id = "showcase.video"
+text = "Screen recordings embed in any pane, aligned to the timeline."
+
+[[lines]]
+id = "showcase.overlay"
+text = "And overlay cards stack on top for notes and callouts."
+
+# More clips
+[[lines]]
+id = "more.cinematic"
+text = "A cinematic title makes for a punchy chapter opener."
+
+[[lines]]
+id = "more.list"
+text = "Animated lists reveal your points one at a time."
+
+[[lines]]
+id = "more.progress"
+text = "And a progress checklist shows where we are in the episode."
+
+# Sync fence demo
+[[lines]]
+id = "fence.countdown"
+text = "This countdown holds the timeline until it reaches zero."
+
+# Flair
+[[lines]]
+id = "flair.chapter"
+text = "Chapter cards break a long tutorial into numbered sections."
+
+[[lines]]
+id = "flair.notify"
+text = "Notifications pop in for quick beats, like a passing test run."
+
+[[lines]]
+id = "flair.steps"
+text = "And a stepper walks through the stages of a workflow."
