@@ -47,5 +47,8 @@
     "test:smoke": "vitest run tests/smoke",
     "assets:readme-gif": "tsx scripts/tts.mts --episode examples/readme-teaser --provider edge --voice en-US-AriaNeural --rate +40% && remotion render examples-readme-teaser out/readme-teaser.mp4 && ffmpeg -y -i out/readme-teaser.mp4 -vf \"fps=15,scale=960:-2:flags=lanczos,split[s0][s1];[s0]palettegen=max_colors=128[p];[s1][p]paletteuse=dither=bayer:bayer_scale=4\" -loop 0 doc/assets/showcase.gif"
   },
-  "private": true
+  "private": true,
+  "allowScripts": {
+    "msedge-tts@2.0.7": true
+  }
 }

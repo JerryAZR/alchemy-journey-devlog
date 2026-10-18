@@ -1,0 +1,111 @@
+# ============================================================
+# Devlog 001 — 我又开始做游戏了
+# 系列开场：背景、动机、核心创意、下集预告
+# ============================================================
+
+# ---- 第一幕：自黑开场 ----
+[[lines]]
+id = "hook.restart"
+text = "大家好，我是 Jerry。之前的 Bevy 塔防教程完成之后，我休息了一段时间，打打游戏，做点小项目什么的。"
+
+[[lines]]
+id = "hook.again"
+text = "现在，我回来做游戏了。准确地说，是又一次开始。"
+
+[[lines]]
+id = "graveyard.repos"
+text = "我的 GitLab 里曾经躺着好几个游戏项目，每一个都开始得雄心勃勃。"
+
+[[lines]]
+id = "graveyard.silence"
+text = "然后，就没有然后了。"
+
+[[lines]]
+id = "graveyard.notice"
+text = "更惨的是，去年 GitLab 发邮件通知我：不再为大陆的个人用户提供服务。"
+
+[[lines]]
+id = "graveyard.blocked"
+text = "等我再想上去看看的时候，账号已经被封了——连坟头都没了。"
+
+# ---- 第二幕：杀戮尖塔入坑 ----
+[[lines]]
+id = "sts.addicted"
+text = "事情要从杀戮尖塔说起，我最近每个周末的固定活动。叫上几个好友，选上各自熟悉的职业，不断地刷新我们的连胜纪录。"
+
+[[lines]]
+id = "sts.spark"
+text = "玩着玩着，那个熟悉的念头又冒出来了：我还没做过卡牌类游戏，要不这回试一下？"
+
+# ---- 第三幕：核心创意 ----
+[[lines]]
+id = "idea.twist"
+text = "照抄杀戮尖塔没意思，我想往卡牌肉鸽里加一点自己的东西。"
+
+[[lines]]
+id = "idea.noita"
+text = "第一个是 Noita 和魔法工艺的法术编程：把效果、修正、触发方式像积木一样自由拼接。"
+
+[[lines]]
+id = "idea.atelier"
+text = "第二个是炼金工坊的调和系统：让消耗品的制作本身，成为玩法的一部分。"
+
+[[lines]]
+id = "idea.question"
+text = "它们和卡牌肉鸽碰撞在一起，会产生独特的趣味吗？感觉值得一试。"
+
+# ---- 第四幕：为什么这次能成 ----
+[[lines]]
+id = "proof.towerdefense"
+text = "回到几个月前，我为了学习 Bevy 引擎，做了一个塔防游戏。"
+
+[[lines]]
+id = "proof.videos"
+text = "基于'给别人讲解可以加深自己的理解'，我还给它录了一整套教学视频。"
+
+[[lines]]
+id = "proof.finished"
+text = "虽然机制简单，但它至少做完了。"
+
+[[lines]]
+id = "proof.lesson"
+text = "网上也有独立开发者分享过经验，一个人闷头做项目，很容易因为各种原因断掉。"
+
+# ---- 第五幕：DevLog 动机 + 下集预告 ----
+[[lines]]
+id = "devlog.format"
+text = "于是这次我换个方式：把开发过程做成 DevLog，公开分享进度。"
+
+# ---- 第六幕：这次有什么不同 ----
+[[lines]]
+id = "ai.different"
+text = "要说这回还有什么和之前不同，那就是国产 AI 的能力，终于好起来了。"
+
+[[lines]]
+id = "ai.before"
+text = "以往做游戏，我会花很长时间在系统设计上。"
+
+[[lines]]
+id = "ai.try"
+text = "但这次我想试试不一样的流程：直接把需求丢给 AI，看看它能做到什么程度。"
+
+# ---- 第七幕：第一版验收 + 下集预告 ----
+[[lines]]
+id = "task.first"
+text = "第一步，我让它先搭出最小的可玩循环：抽牌、出牌、结束回合，牌库空了就把弃牌堆洗回去。"
+
+[[lines]]
+id = "task.why"
+text = "有了框架之后，再往里添功能，就能立刻看到效果。"
+
+[[lines]]
+id = "result.looks"
+text = "AI 给出的成品，打眼一看还挺像回事。"
+
+[[lines]]
+id = "result.playtest"
+text = "上手试了两下，也没有明显的 bug。"
+
+[[lines]]
+id = "next.quality"
+text = "那么，代码质量怎么样呢？我们下集再看。"

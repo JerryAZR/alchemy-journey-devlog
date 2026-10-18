@@ -1,6 +1,5 @@
-import { Video } from "@remotion/media";
 import { mix, readableColor } from "polished";
-import { staticFile } from "remotion";
+import { Loop, OffthreadVideo, staticFile } from "remotion";
 import { useCardColor, useThemeColors } from "../../calculate-metadata/theme";
 import { cardRadius } from "../code-style";
 import { useEpisodeName } from "../EpisodeNameContext";
@@ -37,15 +36,29 @@ export const VideoClip: ClipComponent<VideoClipDef> = ({ clip }) => {
         overflow: "hidden",
       }}
     >
-      <Video
-        src={staticFile(`${episode}/video/${clip.src}`)}
-        trimBefore={clip.startFrom ?? 0}
-        playbackRate={clip.playbackRate ?? 1}
-        muted={clip.muted ?? true}
-        loop={clip.loop ?? false}
-        objectFit="contain"
-        style={{ width: "100%", height: "100%" }}
-      />
+      {/* OffthreadVideo (Rust compositor extracts frames server-side) instead
+          of @remotion/media Video: in-browser decoding saturated the render
+          tab's event loop, which starved the module-scope font load and
+          killed renders mid-run with a delayRender timeout.
+          OffthreadVideo has no loop prop; Loop wraps the clip window. */}
+      {(() => {
+        const video = (
+          <OffthreadVideo
+            src={staticFile(`${episode}/video/${clip.src}`)}
+            trimBefore={clip.startFrom ?? 0}
+            playbackRate={clip.playbackRate ?? 1}
+            muted={clip.muted ?? true}
+            style={{ width: "100%", height: "100%", objectFit: "contain" }}
+          />
+        );
+        return (clip.loop ?? false) ? (
+          <Loop durationInFrames={clip.endFrame - clip.startFrame}>
+            {video}
+          </Loop>
+        ) : (
+          video
+        );
+      })()}
     </div>
   );
 };

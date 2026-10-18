@@ -96,6 +96,16 @@ Defaults in parentheses. Key chains: clips sharing `key` continue exactly where 
 
 Also available: **animated-list** (staggered bullet reveal), **progress** (done/current/todo checklist), **countdown** (ring timer; pair with a sync fence to hold the timeline), **chapter-title** (numbered chapter card), **notification-pop** (toast stack), **progress-steps** (horizontal stepper) - config in [rules/more-clips.md](rules/more-clips.md).
 
+## 画面策略
+
+字幕行时长由配音决定，每一行都要有与之匹配的画面。按行的性质选择：
+
+- **内容延续**：该行是前一段内容的延续（反思、补充、评价）时，把前一段的
+  视频延长过来当 B-roll（或让尾帧多停留一会儿），由字幕承载信息即可
+- **承上启下**：转场行用 cinematic-title / chapter-title 这类标题卡
+- **纯文字卡不能撑场面**：overlay 只能做点缀（小 rect + zIndex 浮在主画面
+  上），无论字多字少，都不能独占画面撑时长
+
 ## When the 80% path isn't enough
 
 - Full storyboard reference (all end conditions, validation rules) - [rules/storyboard-format.md](rules/storyboard-format.md)
