@@ -36,3 +36,26 @@ candidates, not bugs. Dispositions from discussion are noted inline.
   (masked): `Config.setDelayRenderTimeoutInMilliseconds(60000)` in
   remotion.config.ts. If stalls recur, the real suspect is the bundle
   server's behavior under load, not the timeout value.
+
+  UPDATE (devlog-001 investigation): the bundle-server theory above is
+  WRONG. The stall reproduces with fonts inlined as base64 data URIs (zero
+  fetch). What actually happens: `FontFace.load()`'s promise intermittently
+  never settles in a headless-Chrome page - page event loop alive, no
+  network involved, random which page it hits. `loadFont()` holds an
+  indefinite delayRender handle, so the flake kills the whole render and
+  the timeout error masks any preceding error (e.g. a compositor
+  "Request closed"). RESOLVED: src/font.ts loads fonts fire-and-forget
+  and calculateMetadata's wait is bounded to 15s with a loud fallback
+  warning. Fonts are also inlined (scripts/inline-fonts.cjs) to remove the
+  fetch from the equation entirely.
+
+- **ffmpeg cannot be spawned from a post-render process (pi harness only).**
+  After a full render inside the harness's process tree, EVERY child spawn
+  from that process exits with STATUS_DLL_INIT_FAILED (0xC0000142) - even
+  `node -v`, with minimal env, system memory/handles fine, other processes
+  unaffected. Pre-render spawns work; a process tree created via
+  `cmd /c start` never degrades. Points at the harness's job/process-tree
+  accounting, not Remotion. WORKAROUND: scripts/render-episode.mts splits
+  renderFrames + stitchFramesToVideo (also disables parallel encoding so
+  the stitch is short), and full renders should be launched via
+  `cmd /c start` until the harness-side cause is fixed.
