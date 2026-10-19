@@ -27,11 +27,11 @@ import fs from "node:fs";
 import path from "node:path";
 import { MsEdgeTTS, OUTPUT_FORMAT } from "msedge-tts";
 import { parse as parseToml } from "smol-toml";
-import {
-  applyPronunciation,
+import { applyPronunciation,
   defaultPronunciation,
   mergePronunciation,
 } from "../src/engine/pronunciation";
+import { measureAudioDuration } from "../src/engine/audio";
 import { parseSubtitles } from "../src/engine/subtitles";
 import { mintJwt } from "./ssh-jwt";
 
@@ -168,10 +168,40 @@ const synthesizeOpenAI = async (text: string, file: string, cfg: OpenAIConfig) =
   fs.writeFileSync(file, Buffer.from(await res.arrayBuffer()));
 };
 
-const synthesize = (text: string, file: string) =>
-  config.provider === "edge"
-    ? synthesizeEdge(text, file, config)
-    : synthesizeOpenAI(text, file, config);
+// Sanity check: TTS servers can return HTTP 200 with truncated/garbage
+// audio. Compare the measured duration against a spoken-rate estimate
+// (CJK ~5 chars/s, others ~15 chars/s) and reject wildly off results - a
+// rejected line is not cached, so the next run retries it.
+const expectedSpokenSeconds = (text: string) => {
+  let cjk = 0;
+  let other = 0;
+  for (const ch of text) {
+    if (ch.charCodeAt(0) > 0x2e7f) {
+      cjk++;
+    } else if (/[\p{L}\p{N}]/u.test(ch)) {
+      other++;
+    }
+  }
+  return cjk / 5 + other / 15;
+};
+
+const synthesize = async (text: string, file: string) => {
+  if (config.provider === "edge") {
+    await synthesizeEdge(text, file, config);
+  } else {
+    await synthesizeOpenAI(text, file, config);
+  }
+  const seconds = await measureAudioDuration(
+    new Blob([fs.readFileSync(file)]),
+  );
+  const expected = expectedSpokenSeconds(text);
+  if (seconds < expected * 0.6 || seconds > expected * 2.5) {
+    fs.rmSync(file);
+    throw new Error(
+      `suspicious audio duration: got ${seconds.toFixed(2)}s, expected ~${expected.toFixed(2)}s (text: ${JSON.stringify(text.slice(0, 30))}...)`,
+    );
+  }
+};
 
 // --- Cache -----------------------------------------------------------------
 
