@@ -72,7 +72,7 @@ export const storyboard: Storyboard = {
 };
 ```
 
-**4. Verify**: `npx tsx scripts/timeline-check.ts <episode>` prints every line/clip's frame range; `npx remotion still <Comp> out/check.png --frame=N` renders one frame to look at (comp id = episode name with `/` → `-`); `npm test` before committing.
+**4. Verify**: `npx tsx scripts/timeline-check.ts <episode>` prints every line/clip's frame range; `npx remotion still <Comp> out/checks/<name>.png --frame=N` renders one frame to look at (comp id = episode name with `/` → `-`); `npm test` before committing. Keep `out/` clean: check stills and logs go in `out/checks/`, only final renders (`out/<name>.mp4`) live at the top level. Full renders: `npx tsx scripts/render-episode.mts <comp> out/<name>.mp4` (launch detached via `cmd /c start` - see doc/authoring-friction.md).
 
 ## Fields every clip has
 
