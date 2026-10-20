@@ -36,7 +36,7 @@ const ensureCoverFont = () => {
 };
 
 // Banner interior measured on series-template.png (1920x1080)
-const BANNER = { x: 340, y: 796, w: 1240, h: 215 };
+const BANNER = { x: 340, y: 758, w: 1240, h: 215 };
 
 export const SeriesCover = ({ title, subtitle }: SeriesCoverProps) => {
   // Hold a delayRender until the font settles or a 10s bound passes -
