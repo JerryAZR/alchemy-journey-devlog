@@ -7,6 +7,7 @@ import { defaultTheme } from "./calculate-metadata/theme";
 import { EPISODE_FPS, episodeCalculateMetadata, episodeSchema } from "./engine/calculate-metadata";
 import { Episode } from "./engine/Episode";
 import { listEpisodes } from "./episodes/registry";
+import { SeriesCover } from "./SeriesCover";
 
 // Composition ids cannot contain slashes, so nested episode names
 // ("examples/showcase") render as "examples-showcase"
@@ -62,6 +63,16 @@ export const RemotionRoot = () => {
           <EpisodeComposition key={name} episode={name} />
         ))}
       </Folder>
+      {/* Series cover generator: one still per episode, title in the banner */}
+      <Composition
+        id="series-cover"
+        component={SeriesCover}
+        defaultProps={{ title: "我又开始做游戏了" }}
+        durationInFrames={30}
+        fps={30}
+        width={1920}
+        height={1080}
+      />
       {/* One composition per registered user episode, so Studio lists them */}
       {userEpisodes.map((name) => (
         <EpisodeComposition key={name} episode={name} />
