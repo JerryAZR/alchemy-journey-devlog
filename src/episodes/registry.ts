@@ -5,6 +5,7 @@ import { storyboard as diffTool } from "../examples/diff-tool/storyboard";
 import { storyboard as readmeTeaser } from "../examples/readme-teaser/storyboard";
 import { storyboard as showcase } from "../examples/showcase/storyboard";
 import { storyboard as devlog001 } from "./devlog/001-why-another-game/storyboard";
+import { storyboard as devlog002 } from "./devlog/002-the-split/storyboard";
 
 export type EpisodeModule = {
   storyboard: Storyboard;
@@ -21,6 +22,7 @@ const episodes: Record<string, EpisodeModule> = {
   "examples/diff-tool": { storyboard: diffTool },
   "examples/readme-teaser": { storyboard: readmeTeaser },
   "devlog/001-why-another-game": { storyboard: devlog001 },
+  "devlog/002-the-split": { storyboard: devlog002 },
 };
 
 // Test fixtures (registered from tests/, e.g. the smoke suite's kitchen
