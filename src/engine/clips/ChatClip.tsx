@@ -6,6 +6,7 @@ import {
   useThemeColors,
 } from "../../calculate-metadata/theme";
 import { CardHeader } from "./CardHeader";
+import { chatWidthCh } from "./chat-state";
 import {
   cardPadding,
   cardRadius,
@@ -75,14 +76,24 @@ export const wrapChatText = (text: string, widthCh: number): string[] => {
     for (const ch of paragraph) {
       const w = ch.charCodeAt(0) > 0x2e7f ? 2 : 1;
       if (cols + w > widthCh && line !== "") {
-        out.push(line);
-        line = "";
-        cols = 0;
+        // Word wrap: break at the last space when there is one (latin
+        // prose); hard-break otherwise (CJK, long tokens)
+        const sp = line.lastIndexOf(" ");
+        if (sp > 0) {
+          out.push(line.slice(0, sp));
+          line = line.slice(sp + 1);
+          cols = displayColumns(line);
+          line += ch;
+          cols += w;
+        } else {
+          out.push(line);
+          line = ch === " " ? "" : ch; // don't start a line with a space
+          cols = ch === " " ? 0 : w;
+        }
+      } else {
+        line += ch;
+        cols += w;
       }
-      // don't start a wrapped line with a space
-      if (line === "" && ch === " ") continue;
-      line += ch;
-      cols += w;
     }
     if (line !== "") {
       out.push(line);
@@ -185,16 +196,10 @@ export const ChatClip: ClipComponent<ChatClipDef> = ({ clip }) => {
   }
 
   // Pane pixel size from the rect (percentages resolve against the
-  // composition) - pure math, no DOM measuring.
+  // composition) - pure math, no DOM measuring. chatWidthCh (shared with
+  // the resolver) does the same for the wrap width.
   const paneH = resolveRectValue(clip.rect.h, compHeight);
-  const paneW = resolveRectValue(clip.rect.w, compWidth);
-
-  // Fira Code's advance measures ~0.62em in the rendered frames (0.6em
-  // on paper); the -2 safety margin absorbs font-fallback drift - wrapping
-  // slightly early is harmless, wrapping late overflows the pane.
-  const charWidthPx = codeFontSize * 0.62;
-  const contentWidthPx = paneW - cardPadding * 2;
-  const widthCh = Math.floor(contentWidthPx / charWidthPx) - 2;
+  const widthCh = chatWidthCh(clip.rect, compWidth);
 
   const editorHeight =
     EDITOR_MAX_LINES * lineHeightPx + EDITOR_PADDING_Y * 2;
@@ -211,7 +216,12 @@ export const ChatClip: ClipComponent<ChatClipDef> = ({ clip }) => {
     ),
   );
 
-  const state = chatStateAt(clip.steps, clip, frame, widthCh);
+  const state = chatStateAt(
+    clip.steps,
+    clip,
+    frame + (clip.carryFrames ?? 0),
+    widthCh,
+  );
   const visible = state.scrollback.slice(-scrollbackCapacity);
 
   const textColor = themeColors.editor.foreground;

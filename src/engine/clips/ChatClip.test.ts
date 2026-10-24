@@ -15,8 +15,12 @@ describe("wrapChatText", () => {
     expect(wrapChatText("hello world", 80)).toEqual(["hello world"]);
   });
 
-  test("wraps at column width", () => {
-    expect(wrapChatText("aaaa bbbb cccc", 9)).toEqual(["aaaa bbbb", "cccc"]);
+  test("wraps at column width, breaking at spaces (no mid-word breaks)", () => {
+    expect(wrapChatText("aaaa bbbb cccc", 9)).toEqual(["aaaa", "bbbb cccc"]);
+  });
+
+  test("long tokens hard-break when no space is available", () => {
+    expect(wrapChatText("x".repeat(14), 8)).toEqual(["x".repeat(8), "x".repeat(6)]);
   });
 
   test("CJK counts double when wrapping", () => {

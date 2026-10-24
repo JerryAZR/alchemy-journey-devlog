@@ -227,6 +227,7 @@ const flairClips: Storyboard["clips"] = [
     // pi-style AI conversation: user types and sends, AI streams back
     id: "chat-1",
     type: "chat",
+    key: "ks-chat",
     steps: [
       { role: "user", text: "Can you drive a full game without any UI?" },
       { role: "thinking" },
@@ -236,6 +237,19 @@ const flairClips: Storyboard["clips"] = [
     transitionIn: 15,
     startAt: { line: "flair.chat" },
     endAt: [{ line: "flair.chat", end: true }],
+  },
+  {
+    // Chained: scrollback carries over from chat-1, new beats continue it
+    id: "chat-2",
+    type: "chat",
+    key: "ks-chat",
+    steps: [
+      { role: "user", text: "And the scrollback carried over?" },
+      { role: "ai", text: "Yes - chained clips share the conversation." },
+    ],
+    transitionIn: 15,
+    startAt: { line: "flair.chat2" },
+    endAt: [{ line: "flair.chat2", end: true }],
   },
 ];
 

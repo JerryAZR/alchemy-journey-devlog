@@ -78,3 +78,7 @@ text = "And a stepper walks through the stages of a workflow."
 [[lines]]
 id = "flair.chat"
 text = "A chat clip replays a conversation with the AI, typed live."
+
+[[lines]]
+id = "flair.chat2"
+text = "Chained chat clips continue the same conversation."

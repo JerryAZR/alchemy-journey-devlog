@@ -244,6 +244,7 @@ const r2Clips: Storyboard["clips"] = [
     // 用户敲出“What malicious attacker are you expecting?”
     id: "r2-chat",
     type: "chat",
+    key: "r2",
     steps: [
       {
         role: "ai",
@@ -275,12 +276,25 @@ const r2Clips: Storyboard["clips"] = [
     endAt: [{ line: "r2.checklist", end: true }],
   },
   {
-    id: "r2-bugs",
-    type: "code",
-    steps: ["q-bugs.md"],
-    filename: "2026-10-12 · 第二回合",
-    paneTitle: "证物",
-    rect: rects.large,
+    // 同一场对话的继续（key 链继承上面的 scrollback）：AI 换说辞，
+    // 用户连发两条拆解（均为原文，10-12 15:45/15:51）
+    id: "r2-chat-2",
+    type: "chat",
+    key: "r2",
+    steps: [
+      {
+        role: "ai",
+        text: "Fair hit - \"security insight\" was the wrong frame. Let me re-justify the same design on grounds that actually apply: the real threat model is bugs, not attackers. A client that misremembers its own identity, a mod doing something the base game never anticipated...",
+      },
+      {
+        role: "user",
+        text: "\"a mod doing something the base game never anticipated\" What? Like couch-internet 2+2 co-op? Your connection-as-identity proposal just killed that as a potential feature.",
+      },
+      {
+        role: "user",
+        text: "\"A client that misremembers its own identity\"? The client is also implemented by us - why leave a known bug unfixed at all?",
+      },
+    ],
     transitionIn: 15,
     startAt: { line: "r2.excuse" },
     endAt: [{ line: "r2.inertia", end: true }],

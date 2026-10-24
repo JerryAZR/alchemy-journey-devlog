@@ -115,6 +115,14 @@ export type ChatClipDef = ClipCommon & {
   type: "chat";
   /** Conversation beats, played in order */
   steps: ChatStep[];
+  /**
+   * Persistence chain id: chained chat clips continue the conversation -
+   * the previous clip's steps are prepended (already completed) so the
+   * scrollback carries over instead of restarting empty
+   */
+  key?: string;
+  /** Injected by the state resolver, not authored: frame offset skipping the carried steps' playback */
+  carryFrames?: number;
   /** Status bar: model name (default "kimi-k3") */
   model?: string;
   /** Status bar: working directory */

@@ -5,6 +5,7 @@ import { z } from "zod";
 import { themeSchema, ThemeColors } from "../calculate-metadata/theme";
 import { getEpisode } from "../episodes/registry";
 import { resolveLineAudio } from "./audio";
+import { resolveChatState } from "./clips/chat-state";
 import { resolveCodeState } from "./clips/code-state";
 import { highlightCodeSteps } from "./highlight";
 import { loadSubtitles } from "./subtitles";
@@ -18,6 +19,8 @@ import type { CodeClipDef, Timeline } from "./types";
  * change it in one place.
  */
 export const EPISODE_FPS = 30;
+/** Composition width, needed by resolvers whose math depends on pane pixels */
+export const EPISODE_WIDTH = 1920;
 
 export const episodeSchema = z.object({
   episode: z.string(),
@@ -42,7 +45,7 @@ export const episodeCalculateMetadata: CalculateMetadataFunction<
   const rawTimeline = calculateTimeline(lines, storyboard.clips);
   const timeline: Timeline = {
     ...rawTimeline,
-    clips: resolveCodeState(rawTimeline.clips),
+    clips: resolveChatState(resolveCodeState(rawTimeline.clips), EPISODE_WIDTH),
   };
 
   const codeSrcs = [
