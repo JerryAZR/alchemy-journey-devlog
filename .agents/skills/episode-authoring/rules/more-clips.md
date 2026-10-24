@@ -94,3 +94,28 @@ hidden` - give the pane enough width.
 Competes with `progress` (the vertical checklist) as the progress tracker:
 `progress-steps` wins on animation quality, `progress` wins on hierarchy and
 nesting. Both are ported; pick per episode, default TBD.
+
+## chat
+
+pi-style conversation with the AI: scrollback on top, editor box under a
+divider, decorative status bar (model + cwd) at the bottom. For scenes that
+replay a real prompt/response exchange.
+
+- `steps: ChatStep[]` - beats in order:
+  - `{ role: "user", text }` - types into the editor char by char, pauses,
+    then sends into the scrollback (accent `❯` prefix)
+  - `{ role: "ai", text }` - streams into the scrollback, one wrapped line
+    per `streamLineDelay`
+  - `{ role: "thinking" }` - a dim "Thinking..." beat
+- `model?` / `cwd?` - status bar text (defaults: "kimi-k3", the devlog's
+  project path)
+- `typeSpeed?` (chars/frame, default 1), `streamLineDelay?` (default 6),
+  `sendPause?` (default 18), `thinkingFrames?` (default 45)
+
+Text wraps by display columns (monospace, CJK = 2 columns) computed from the
+rect - author natural text, no manual line breaks needed. Step pacing is
+frame-driven like the terminal clip: size the step text so typing finishes
+inside the narration line's window; the clip holds on the final state.
+
+Prefer short original quotes for user steps (the typing IS the scene); AI
+steps take excerpts or summaries when the real reply is long.

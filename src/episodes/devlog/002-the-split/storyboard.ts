@@ -180,12 +180,21 @@ const r1Clips: Storyboard["clips"] = [
     endAt: [{ line: "r1.inertia", end: true }],
   },
   {
-    id: "r1-quote",
-    type: "code",
-    steps: ["q-advance.md"],
-    filename: "2026-10-13 · 评审记录",
-    paneTitle: "证物",
-    rect: rects.large,
+    // 评审现场重现：scrollback 里是 AI 的提案原文摘录（10-13 14:25），
+    // 用户当着观众的面敲出那句毙掉 advance() 的话
+    id: "r1-chat",
+    type: "chat",
+    steps: [
+      {
+        role: "ai",
+        text: "advance() is not part of the protocol. Parameterless, a pure function of state: it advances the core's pending machinery by one beat. Callers own pacing (when to pump), never sequencing.",
+      },
+      {
+        role: "user",
+        text: "Another way to argue against frontend calling advance: if advance is going to be called eventually, then timing is pointless to the backend.",
+      },
+    ],
+    rect: rects.xl,
     transitionIn: 15,
     startAt: { line: "r1.question" },
     endAt: [{ line: "r1.question", end: true }],
@@ -231,12 +240,21 @@ const r2Clips: Storyboard["clips"] = [
     endAt: [{ line: "r2.proposal", end: true }],
   },
   {
-    id: "r2-quote",
-    type: "code",
-    steps: ["q-attacker.md"],
-    filename: "2026-10-12 · 评审记录",
-    paneTitle: "证物",
-    rect: rects.large,
+    // 评审现场：AI 的“安全洞察”提案原文摘录（10-12 15:31），
+    // 用户敲出“What malicious attacker are you expecting?”
+    id: "r2-chat",
+    type: "chat",
+    steps: [
+      {
+        role: "ai",
+        text: "The parenthetical is the key security insight: identity on the wire is only trustworthy server -> client. Client -> server, the connection is the identity - a client-supplied \"I am player 2\" field is spoofable.",
+      },
+      {
+        role: "user",
+        text: "What is \"security insight\"? This is a game played with friends, might even be moddable. What \"malicious attacker\" are you expecting?",
+      },
+    ],
+    rect: rects.xl,
     transitionIn: 15,
     startAt: { line: "r2.question" },
     endAt: [{ line: "r2.question", end: true }],
@@ -348,12 +366,21 @@ const r4Clips: Storyboard["clips"] = [
 // ── 是非题探针 ───────────────────────────────────────────
 const probeClips: Storyboard["clips"] = [
   {
-    id: "probe-quote",
-    type: "code",
-    steps: ["q-selftest.md"],
-    filename: "2026-10-13 · 一道是非题",
-    paneTitle: "证物",
-    rect: rects.large,
+    // 是非题现场：用户敲出问题，AI 诚实认账（原文摘录，10-13 14:18）
+    id: "probe-chat",
+    type: "chat",
+    steps: [
+      {
+        role: "user",
+        text: "Before I look at it, here's a quick self test: can you drive a full game, pragramatically, without any UI, and without the testbench help maintaining any game state?",
+      },
+      { role: "thinking" },
+      {
+        role: "ai",
+        text: "Honest answer: almost. Gap 1: the caller must know the transition graph - a structural flaw. Gap 2: combat cannot end - a feature gap.",
+      },
+    ],
+    rect: rects.xl,
     transitionIn: 15,
     startAt: { line: "probe.question" },
     endAt: [{ line: "probe.pretend", end: true }],

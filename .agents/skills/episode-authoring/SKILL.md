@@ -94,7 +94,7 @@ Standard rects come from `rects` in `src/engine/clip-style.ts`: `rects.full` (ti
 
 Defaults in parentheses. Key chains: clips sharing `key` continue exactly where the previous ended (code step, scroll, rect, filename) - they must not overlap and must keep the same top-left corner.
 
-Also available: **animated-list** (staggered bullet reveal), **progress** (done/current/todo checklist), **countdown** (ring timer; pair with a sync fence to hold the timeline), **chapter-title** (numbered chapter card), **notification-pop** (toast stack), **progress-steps** (horizontal stepper) - config in [rules/more-clips.md](rules/more-clips.md).
+Also available: **animated-list** (staggered bullet reveal), **progress** (done/current/todo checklist), **countdown** (ring timer; pair with a sync fence to hold the timeline), **chapter-title** (numbered chapter card), **notification-pop** (toast stack), **progress-steps** (horizontal stepper), **chat** (pi-style AI conversation: typed user messages + streaming replies) - config in [rules/more-clips.md](rules/more-clips.md).
 
 ## 画面策略
 

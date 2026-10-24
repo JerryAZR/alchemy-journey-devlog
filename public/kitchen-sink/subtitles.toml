@@ -74,3 +74,7 @@ text = "Notifications pop in for quick beats, like a passing test run."
 [[lines]]
 id = "flair.steps"
 text = "And a stepper walks through the stages of a workflow."
+
+[[lines]]
+id = "flair.chat"
+text = "A chat clip replays a conversation with the AI, typed live."

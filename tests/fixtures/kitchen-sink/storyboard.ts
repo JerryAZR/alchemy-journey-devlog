@@ -223,6 +223,20 @@ const flairClips: Storyboard["clips"] = [
     startAt: { line: "flair.steps" },
     endAt: [{ line: "flair.steps", end: true }],
   },
+  {
+    // pi-style AI conversation: user types and sends, AI streams back
+    id: "chat-1",
+    type: "chat",
+    steps: [
+      { role: "user", text: "Can you drive a full game without any UI?" },
+      { role: "thinking" },
+      { role: "ai", text: "Honest answer: almost. Two gaps worth naming." },
+    ],
+    rect: { x: "20%", y: "15%", w: "60%", h: "70%" },
+    transitionIn: 15,
+    startAt: { line: "flair.chat" },
+    endAt: [{ line: "flair.chat", end: true }],
+  },
 ];
 
 export const storyboard: Storyboard = {

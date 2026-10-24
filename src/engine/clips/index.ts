@@ -1,6 +1,7 @@
 import type { ClipComponent, StoryboardClip } from "../types";
 import { AnimatedListClip } from "./AnimatedListClip";
 import { ChapterTitleClip } from "./ChapterTitleClip";
+import { ChatClip } from "./ChatClip";
 import { CinematicTitleClip } from "./CinematicTitleClip";
 import { CodeClip } from "./CodeClip";
 import { CountdownClip } from "./CountdownClip";
@@ -23,6 +24,7 @@ export const sharedClipComponents: SharedClipComponents = {
   "cinematic-title": CinematicTitleClip,
   code: CodeClip,
   terminal: TerminalClip,
+  chat: ChatClip,
   video: VideoClip,
   overlay: OverlayClip,
   "animated-list": AnimatedListClip,

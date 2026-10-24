@@ -97,6 +97,38 @@ export type TerminalClipDef = ClipCommon & {
   showCursor?: boolean;
 };
 
+export type ChatStep =
+  /** Types into the editor box char by char, then "sends" into the scrollback */
+  | { role: "user"; text: string }
+  /** Streams into the scrollback, one wrapped line per streamLineDelay */
+  | { role: "ai"; text: string }
+  /** A dim "Thinking..." beat between messages */
+  | { role: "thinking" };
+
+/**
+ * pi-style conversation with the AI: scrollback on top (user messages sent
+ * from the editor ride an accent `❯` prefix), editor box under a divider,
+ * decorative status bar at the bottom. Text wraps deterministically by
+ * display columns (monospace font, CJK = 2 columns) - no DOM measuring.
+ */
+export type ChatClipDef = ClipCommon & {
+  type: "chat";
+  /** Conversation beats, played in order */
+  steps: ChatStep[];
+  /** Status bar: model name (default "kimi-k3") */
+  model?: string;
+  /** Status bar: working directory */
+  cwd?: string;
+  /** User typing speed, chars per frame (default 1) */
+  typeSpeed?: number;
+  /** Frames between streamed AI lines (default 6) */
+  streamLineDelay?: number;
+  /** Frames the finished message sits in the editor before sending (default 18) */
+  sendPause?: number;
+  /** Length of a "Thinking..." beat in frames (default 45) */
+  thinkingFrames?: number;
+};
+
 export type VideoClipDef = ClipCommon & {
   type: "video";
   /** Video file in public/<episode>/video/ */
@@ -188,6 +220,7 @@ export type ProgressStepsClipDef = ClipCommon & {
 export type StoryboardClip =
   | CodeClipDef
   | TerminalClipDef
+  | ChatClipDef
   | VideoClipDef
   | OverlayClipDef
   | CinematicTitleClipDef
