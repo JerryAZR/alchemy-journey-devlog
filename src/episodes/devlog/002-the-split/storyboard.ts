@@ -130,6 +130,7 @@ const tasteClips: Storyboard["clips"] = [
     type: "animated-list",
     paneTitle: "AI 代码的长板与短板",
     items: [
+      "✓ 能跑",
       "✓ 正确缩进 · 命名清晰 · 风格一致",
       "✗ 结构简单精巧",
       "✗ 意图清晰",
