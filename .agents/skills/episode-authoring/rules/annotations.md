@@ -42,6 +42,10 @@ There are no TypeScript extras: twoslash (which provided `^?` type callouts
 and automatic compiler-error annotations) was dropped. All annotations are
 written by hand as comments.
 
+**Callout anchoring:** write `!callout` in block form (comment line above the
+target line). The end-of-line form (`code(); // !callout[..] note`) mis-anchors
+to the previous line with the installed lighter.
+
 ## Notes
 
 - Annotations appear instantly with their code state - no fade-in. A
