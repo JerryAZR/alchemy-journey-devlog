@@ -41,6 +41,8 @@ export const rects = {
   full: { x: 0, y: 0, w: "100%", h: "100%" },
   /** The standard single window (file, terminal, video) */
   large: { x: "10%", y: "10%", w: "80%", h: "80%" },
+  /** Extra-large central card: dense evidence (full function bodies, long quotes) */
+  xl: { x: "4%", y: "5%", w: "92%", h: "90%" },
   /** Smaller centered window with more breathing room */
   medium: { x: "20%", y: "20%", w: "60%", h: "60%" },
   /** Left half of a side-by-side pair (comparisons, source + output) */

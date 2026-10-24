@@ -4,6 +4,7 @@ bar.spawn((
     observe(|_: On<Activate>, mut combat: ResMut<Combat>| {
         // !mark(1:2)
         combat.0.end_player_turn();
-        combat.0.run_enemy_turn(); // !callout[18:32] 游戏流程由按钮回调驱动
+        // !callout[18:32] 游戏流程由按钮回调驱动
+        combat.0.run_enemy_turn();
     }),
 ));

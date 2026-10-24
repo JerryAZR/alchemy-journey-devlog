@@ -13,17 +13,7 @@ pub struct CombatState {
 }
 
 impl CombatState {
-    pub fn play_card(&mut self, hand_index: usize) -> Result<(), PlayError> {
-        // ...
-    }
-
-    /// Ends the player turn: hand is discarded, phase flips to the enemy.
-    pub fn end_player_turn(&mut self) {
-        // ...
-    }
-
-    /// Runs the (currently inert) enemy turn, then starts the next player turn.
-    pub fn run_enemy_turn(&mut self) {
-        // ...
-    }
+    pub fn play_card(&mut self, hand_index: usize) -> Result<(), PlayError> { /* ... */ }
+    pub fn end_player_turn(&mut self) { /* ... */ }
+    pub fn run_enemy_turn(&mut self) { /* ... */ }
 }
