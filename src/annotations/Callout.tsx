@@ -29,7 +29,11 @@ export const callout: AnnotationHandler = {
     const calloutColor = mix(0.08, color, themeColors.background);
 
     return (
-      <>
+      // Plain block wrapper: Diff's Line renders every line as a flex row
+      // (for its gutter), so returning a bare [line, box] fragment here
+      // would make the box a flex ITEM beside the code instead of a block
+      // under it. Never return siblings from AnnotatedLine.
+      <div>
         <InnerLine merge={props} />
         <div
           style={{
@@ -64,7 +68,7 @@ export const callout: AnnotationHandler = {
             annotation.data.children || annotation.query
           )}
         </div>
-      </>
+      </div>
     );
   },
 };

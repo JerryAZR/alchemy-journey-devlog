@@ -46,14 +46,17 @@ const openClips: Storyboard["clips"] = [
   },
   {
     // open.guess：展开 run_enemy_turn 全身（callout 指向藏起来的抽牌），
-    // 微滚动让 callout 避开字幕条
+    // 大改写用 line 过渡；scrollTo 3 轻卷——callout 避开字幕条即可，
+    // 别把 end_player_turn 的签名卷出画面
     id: "review-marked-2",
     type: "code",
     key: "review",
     steps: ["combat-marked-2.rs"],
     filename: "src/combat/mod.rs · @28bc73a",
     rect: rects.xl,
-    scrollTo: 6,
+    // eslint-disable-next-line @remotion/non-pure-animation -- data property (code morph granularity), not a CSS transition
+    transition: "line",
+    scrollTo: 2,
     startAt: { line: "open.guess" },
     endAt: [{ line: "open.guess", end: true }],
   },

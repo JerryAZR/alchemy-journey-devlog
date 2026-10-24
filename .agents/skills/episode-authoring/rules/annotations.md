@@ -42,9 +42,10 @@ There are no TypeScript extras: twoslash (which provided `^?` type callouts
 and automatic compiler-error annotations) was dropped. All annotations are
 written by hand as comments.
 
-**Callout anchoring:** write `!callout` in block form (comment line above the
-target line). The end-of-line form (`code(); // !callout[..] note`) mis-anchors
-to the previous line with the installed lighter.
+**Callout rendering:** `Callout.AnnotatedLine` wraps `[line, box]` in a
+plain block div. Never return bare siblings there - Diff's Line renders
+every line as a flex row (for its gutter), and a bare fragment would make
+the box a flex item floating beside the code instead of a block under it.
 
 ## Notes
 
