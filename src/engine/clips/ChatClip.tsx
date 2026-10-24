@@ -275,22 +275,29 @@ export const ChatClip: ClipComponent<ChatClipDef> = ({ clip }) => {
             key={i}
             style={{
               whiteSpace: "pre",
-              color: line.role === "ai" ? mix(0.25, cardBackground, textColor) : textColor,
+              // half-line gap between messages (not between a message's
+              // own wrapped lines); skipped for the topmost visible line
+              marginTop: line.first && i > 0 ? lineHeightPx / 2 : 0,
+              color:
+                line.role === "ai"
+                  ? mix(0.25, cardBackground, textColor)
+                  : textColor,
             }}
           >
-            {line.role === "user" ? (
-              line.first ? (
-                <span style={{ color: accent }}>❯ </span>
-              ) : (
-                "  "
-              )
-            ) : null}
+            {/* both roles get a 2-column marker slot so text aligns */}
+            {line.first ? (
+              <span style={{ color: line.role === "user" ? accent : dimColor }}>
+                {line.role === "user" ? "❯ " : "‣ "}
+              </span>
+            ) : (
+              "  "
+            )}
             {line.text}
           </div>
         ))}
         {state.thinking ? (
           <div style={{ color: dimColor, fontStyle: "italic" }}>
-            Thinking...
+            {"  "}Thinking...
           </div>
         ) : null}
       </div>
