@@ -1,0 +1,6 @@
+running 1 test
+thread 'tests::cast_stops_when_its_quota_is_spent' (11036) panicked at crates\combat\src\tests.rs:374:5:
+assertion `left == right` failed
+  left: 28
+ right: 29
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 21 filtered out; finished in 0.00s

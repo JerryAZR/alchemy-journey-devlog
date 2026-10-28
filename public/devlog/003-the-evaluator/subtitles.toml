@@ -1,0 +1,330 @@
+# Devlog 003 - The Evaluator
+# Jerry's narration (drafts/devlog-003.md), split into lines. One point per line.
+
+# ---- Part 1: what we're building (player's view) ----
+
+[[lines]]
+id = "open.1"
+text = "首先我和AI讨论清楚了，这个类Noita的法杖系统到底应该怎么在卡牌游戏里面去实现。"
+
+[[lines]]
+id = "noita.intro"
+text = "要讲清楚这件事，需要先理解Noita中的法杖逻辑。我们来看一个例子。"
+
+[[lines]]
+id = "noita.config"
+text = "如图所示，这根法杖的配置从左到右依次是：能量球、加速、弹跳球、伤害增幅、火焰轨迹、闪电箭。"
+
+[[lines]]
+id = "noita.cast1"
+text = "第一次施放，是一个没有任何修改的普通能量球。"
+
+[[lines]]
+id = "noita.cast2"
+text = "第二次，是一个带加速效果的弹跳球。"
+
+[[lines]]
+id = "noita.cast3"
+text = "第三次，是带了伤害增幅的闪电箭，而且飞行路径上会生成火焰。"
+
+[[lines]]
+id = "noita.cast4"
+text = "第四次又回到了开头，施放能量球。"
+
+[[lines]]
+id = "card.analogy"
+text = "回到我们的游戏：一张法术牌可以类比为一个Noita的法杖，其中有很多个格子供玩家填充模块。"
+
+[[lines]]
+id = "card.step"
+text = "每用一次这张卡牌，就相当于在Noita中施放一次法术，完成一步动作。"
+
+[[lines]]
+id = "card.vary"
+text = "根据法术模块的组合方式，下次再使用这张卡时，可能就是不同的消费与效果。"
+
+[[lines]]
+id = "potion.1"
+text = "药水的效果比较直白：不需要支付费用，但使用后会永久从卡组中移除。"
+
+[[lines]]
+id = "potion.2"
+text = "与杀戮尖塔中类似，只是存放位置从独立药水栏换到了卡组中。"
+
+[[lines]]
+id = "static.ai"
+text = "其实我的AI一开始不同意在法术中使用这种步进机制，认为卡牌游戏中卡牌效果需要固定不变。"
+
+[[lines]]
+id = "static.rebut"
+text = "但在我看来这根本不是一个公认或者必须遵守的规则：杀戮尖塔中就有大量卡牌包含随机、如果等描述。"
+
+[[lines]]
+id = "over.simple"
+text = "战斗结束的机制目前故意做的简单：我给AI的要求是，不要在地图系统落地前过度设计战斗结束。"
+
+[[lines]]
+id = "trans.impl"
+text = "玩家可见的部分决定了之后，玩家不可见的部分还剩下大量工作。首先就是上述机制的实现方法。"
+
+# ---- Part 2: the making-of ----
+
+[[lines]]
+id = "tree.proposal"
+text = "我先让AI写了一个设计文档，它提出了一个方案：每张法术牌是一棵效果树。"
+
+[[lines]]
+id = "tree.nodes"
+text = "原子节点负责做事，序列节点负责排序，目标节点负责为子项定目标，然后写一个解释器去遍历这棵树。"
+
+[[lines]]
+id = "tree.textbook"
+text = "形式上，这类似于教科书式的编译器设计。但真的适合我们的场景吗？"
+
+[[lines]]
+id = "tree.example1"
+text = "让它想这样一个场景：一号位和三号位各有一个获得5点护盾的原子节点。"
+
+[[lines]]
+id = "tree.example2"
+text = "然后玩家在二号位插入一个下一个护盾翻倍的增幅。向量层面的改动很小，但效果树需要整个重新搭。"
+
+[[lines]]
+id = "tree.dfs"
+text = "另一方面，树形结构虽然在逻辑上与我们的模型更贴合，但实际执行中能提供的优势非常有限。"
+
+[[lines]]
+id = "tree.vector"
+text = "玩家的编辑界面本就是向量，树形结构的遍历顺序，最终也与向量顺序吻合。"
+
+[[lines]]
+id = "tree.deal"
+text = "最终我们达成一致：扁平指令向量，加一个有状态的顺序评估器。"
+
+[[lines]]
+id = "tree.moral"
+text = "树形的错误设计死在了文档阶段，一行代码都没有被污染——这就是文档先行的意义。"
+
+[[lines]]
+id = "impl.design"
+text = "其余决策逐项定完，写进 DESIGN.md。然后让AI按照设计去实现。"
+
+[[lines]]
+id = "impl.playable"
+text = "没多久，第一版可玩的就出来了。实际上手试了一下，用户可见的部分基本符合要求。"
+
+[[lines]]
+id = "review.why"
+text = "但能玩只是最基础的要求。如果低质量代码不断积累技术债，很快开发将无法继续。下一步就是审查AI写出的代码。"
+
+[[lines]]
+id = "review.librs"
+text = "刚打开文件夹，甚至还没细看代码，我就已经发现一个问题：相关文件夹下只有一个 lib.rs。"
+
+[[lines]]
+id = "review.librs2"
+text = "可想而知，所有的实现挤在一个文件里，后续不论是查询还是修改都会多出许多不必要的麻烦。"
+
+[[lines]]
+id = "review.split"
+text = "我让AI把它拆开，按具体实现的功能，分进几个没有循环依赖的模块。"
+
+[[lines]]
+id = "conserve.rule"
+text = "接着我注意到，AI偷偷发明了一条规则并为其写了检查：手牌、抽牌堆、弃牌堆、消耗堆加在一起，必须与战斗开始时的卡组一致。"
+
+[[lines]]
+id = "conserve.future"
+text = "虽然在目前的卡牌设计中，这条规则碰巧是对的，但以后未必还是这样。"
+
+[[lines]]
+id = "conserve.habit"
+text = "这也是个AI的常见问题：有时AI会在实现功能的时候，顺手加上它觉得合理的规则或者限制。"
+
+[[lines]]
+id = "conserve.sts"
+text = "更有趣的是，这些AI觉得合理或者常见的规则，未必真的常见——比如杀戮尖塔就有在战斗中生成牌的机制。"
+
+[[lines]]
+id = "scope.dup"
+text = "继续往下看，我注意到法术和药水各自定义了一套目标范围的概念。"
+
+[[lines]]
+id = "scope.unify"
+text = "这不仅是功能上的重复，还是对药水与卡牌共用底层机制的违反。所以我让AI把它们统一了。"
+
+[[lines]]
+id = "eval.intro"
+text = "接下来是重头戏：评估、执行法术的系统。我审查的时候发现几个问题。"
+
+[[lines]]
+id = "defense.bug"
+text = "第一，评估循环的绕圈机制，触发条件写的是当前位置序号大于等于法术总长度，触发后绕回位置0。"
+
+[[lines]]
+id = "defense.impossible"
+text = "仔细想来，每次扫描一格的话，位置序号大于总长的情况就不可能出现。"
+
+[[lines]]
+id = "defense.hide"
+text = "一旦发生，说明某个前置条件被推翻，或者实现过程存在bug。这时让它走正常路径绕回位置0，就是把问题藏起来了。正确做法是直接报错并停下。"
+
+[[lines]]
+id = "defense.name"
+text = "这个具体的问题虽然不大，但它反映了一个非常常见的AI坏习惯，我称之为防自己的防御性编程。"
+
+[[lines]]
+id = "defense.q1"
+text = "如果一段逻辑基于一个应该为真的前提实现，但实际运行中发现这个前提不为真，应该怎么办？"
+
+[[lines]]
+id = "defense.a1"
+text = "我发现AI经常喜欢把这段逻辑写成基于前提的条件执行，而非检查前提的断言——导致一旦出错，这段逻辑被跳过，但程序继续运行。"
+
+[[lines]]
+id = "defense.q2"
+text = "如果一段逻辑需要一个合法输入，但这个输入为空，怎么办？AI总喜欢给一个看似合理的默认值，让程序继续运行。"
+
+[[lines]]
+id = "defense.same"
+text = "这两种场景实际上是一个问题：执行过程中发现某个前提被打破了，要假装没发现，继续运行吗？显然不能。"
+
+[[lines]]
+id = "defense.why1"
+text = "一方面，在错误状态下持续运行的程序行为无法预测，可能导致数据损坏。"
+
+[[lines]]
+id = "defense.why2"
+text = "另一方面，程序不能及时停下，而是在几十甚至几百步后、在一个看似无关的地方报错，甚至运行到结束给个错误的结果，定位bug的成本会大幅增加。"
+
+[[lines]]
+id = "loop.bug"
+text = "第二，我注意到AI写的评估循环没有次数上限。一旦出现bug导致死循环，会导致测试挂起而不是失败。"
+
+[[lines]]
+id = "loop.old"
+text = "古法编程时代这不是个问题：看到程序远超预期时间仍没有响应，自然会怀疑哪里有死循环，然后强制停止程序并排查。"
+
+[[lines]]
+id = "loop.ai"
+text = "但AI编程时代，如果死循环发生在前台的工具调用中，会连着AI agent一起挂起，这时就只能人工介入了。"
+
+[[lines]]
+id = "sem.intro"
+text = "刚刚这两个问题，都不是玩家可见的功能性bug。后面这几个就不一样了。"
+
+[[lines]]
+id = "sem.mismatch"
+text = "我看到AI实现的多重施放是把施放次数的上限设为 N，而我设想的是与Noita一致：将接下来的 N 个块视为一个块。这是意图在传递过程中发生的错位。"
+
+[[lines]]
+id = "sem.stack"
+text = "重新设计后，AI用一个栈来实现分组配额。这又是和之前树形结构一样的问题：代码忠实地反映了系统的逻辑结构，但不考虑实现的复杂度和实际价值。"
+
+[[lines]]
+id = "sem.counter"
+text = "对于这个特定的场景，往执行步骤的预算上面直接加就行。至于未来增幅下一块这样的节点，那要等到未来再说——即使现在勉强设计一版，之后也未必能用。"
+
+[[lines]]
+id = "bug.intro"
+text = "接下来这个是个比较有趣的bug：它没法归因到唯一的源头，而是几个实现细节共同作用的结果。"
+
+[[lines]]
+id = "bug.one"
+text = "第一，AI的第一版评估循环，停止点是将要施放一个法术块、但没有剩余施放次数的时候。"
+
+[[lines]]
+id = "bug.two"
+text = "第二，进入多重施放时，不检查剩余施放次数。"
+
+[[lines]]
+id = "bug.result"
+text = "结果就是，一个本来只能放一下的法术，可能因为第一块后面紧跟着多重施放，而额外施放。"
+
+[[lines]]
+id = "bug.example"
+text = "举个例子，考虑伤害、多重施放(2)、伤害、伤害。直觉上来讲，第一次施放是打一次伤害；第二次施放，通过多重施放打两次。"
+
+[[lines]]
+id = "bug.mechanism"
+text = "但这个bug导致第一个伤害结算完成后，虽然没有剩余施放次数，但循环继续进行，遇到多重施放拔高上限，错误施放后续法术。"
+
+[[lines]]
+id = "fix.stop"
+text = "对于这个问题，我们的修复方案是从第一条入手：让循环在施放次数耗尽后，立即停止在下一格。"
+
+[[lines]]
+id = "wrap.intro"
+text = "但这个修复又引入了一个新的bug。讲这个新bug之前，我们先讲讲绕回机制。"
+
+[[lines]]
+id = "wrap.how"
+text = "如果评估循环走到了法术向量末尾、但还有施放次数剩余，会绕回到开头继续循环。"
+
+[[lines]]
+id = "wrap.infinite"
+text = "聪明的你可能已经想到了：这个机制让无限循环变得很容易，比如多重施放(2)接伤害。"
+
+[[lines]]
+id = "wrap.limit"
+text = "为了避免这种场景，我们加了个限制：法杖，或者说法术模板，都有绕回次数上限。"
+
+[[lines]]
+id = "wrap.v1"
+text = "我们初版的设计，计算的是循环经过位置0几次，且大多数法杖的绕回上限是0。"
+
+[[lines]]
+id = "wrap.sparse"
+text = "这就导致一个问题：假设有一个4格的法杖，但我们只在第一格填了一个效果。"
+
+[[lines]]
+id = "wrap.starve"
+text = "那么第一次施放过后，指针会停在第二格；第二次施放时会走过第2、3、4格，绕回到第一格，然后触发绕回次数上限，什么都没干就停止了。"
+
+[[lines]]
+id = "wrap.fix"
+text = "这个行为不符合玩家直觉。我们的修复是：把绕回计数改成经过了本次施放的起始点几次。"
+
+[[lines]]
+id = "test.rule"
+text = "这几个功能性bug，我的要求都是先写失败测试，确认后再进行修复，并用同样的测试检查修复效果。"
+
+[[lines]]
+id = "test.why"
+text = "我对自己审代码找bug的能力有信心，但AI审查时有时会报出看似存在、但实际没有的bug。"
+
+[[lines]]
+id = "test.filter"
+text = "先写失败测试可以过滤掉这些假性bug，避免为了不存在的问题增加复杂度，甚至是引入新的bug。"
+
+[[lines]]
+id = "cost.field"
+text = "Bug修完之后，最后一个设计变更关于能量。AI原本在卡牌上放了一个固定费用字段。"
+
+[[lines]]
+id = "cost.unfair"
+text = "我的反对是：一张交替戳一下和终结技的牌，什么固定费用算公平？没有答案。"
+
+[[lines]]
+id = "cost.noita"
+text = "Noita的设计是按次扣蓝，而我们的规划计算本来就知道每次施放消耗哪些节点，完全可以学习Noita。"
+
+[[lines]]
+id = "cost.done"
+text = "所以费用挪到了指令节点上，牌面显示的是下一次施放的费用。卡牌费用字段，不复存在。"
+
+[[lines]]
+id = "result.tests"
+text = "定型之后：28个核心测试，全部通过 validate 和 process 这扇门驱动引擎。"
+
+[[lines]]
+id = "result.lockstep"
+text = "lockstep 测试升级成了自适应脚本——两个引擎各自打一局真实的游戏到胜利，然后 diff 它们的事件流。"
+
+[[lines]]
+id = "result.eval"
+text = "评估器本体大约 80 行，经历了一场非同寻常的对抗性评审。上手实际体验自然也没有新的问题。"
+
+[[lines]]
+id = "outro.next"
+text = "下一集：敌人该动起来了。"
