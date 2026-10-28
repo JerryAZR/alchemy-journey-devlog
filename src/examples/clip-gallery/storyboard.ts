@@ -119,6 +119,27 @@ export const storyboard: Storyboard = {
       endAt: [{ line: "gallery.notify", end: true }],
     },
     {
+      id: "g-wand",
+      type: "wand",
+      steps: [
+        { consume: [1], cursor: 2, note: "cast 1: plain orb" },
+        { consume: [2, 3], cursor: 4, note: "cast 2: speedy bounce" },
+        { consume: [4, 5, 6], cursor: 1, note: "cast 3: wrap-around", wrap: true },
+      ],
+      slots: [
+        { icon: "Spell_slow_bullet.webp", label: "orb" },
+        { icon: "Spell_speed.webp", label: "speed" },
+        { icon: "Spell_rubber_ball.webp", label: "bounce" },
+        { icon: "Spell_damage.webp", label: "dmg+" },
+        { icon: "Spell_fire_trail.webp", label: "trail" },
+        { icon: "Spell_light_bullet.webp", label: "bolt" },
+      ],
+      rect: { x: "10%", y: "10%", w: "80%", h: "80%" },
+      transitionIn: 15,
+      startAt: { line: "gallery.wand" },
+      endAt: [{ line: "gallery.wand", end: true }],
+    },
+    {
       id: "g-countdown",
       type: "countdown",
       seconds: 3,

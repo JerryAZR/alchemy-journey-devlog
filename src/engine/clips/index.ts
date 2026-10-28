@@ -11,6 +11,7 @@ import { ProgressClip } from "./ProgressClip";
 import { ProgressStepsClip } from "./ProgressStepsClip";
 import { TerminalClip } from "./TerminalClip";
 import { VideoClip } from "./VideoClip";
+import { WandClip } from "./WandClip";
 
 // Optional per key: clip types land incrementally, and episode registries
 // may cover types the shared registry doesn't
@@ -33,4 +34,5 @@ export const sharedClipComponents: SharedClipComponents = {
   "chapter-title": ChapterTitleClip,
   "notification-pop": NotificationPopClip,
   "progress-steps": ProgressStepsClip,
+  wand: WandClip,
 };

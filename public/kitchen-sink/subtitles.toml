@@ -82,3 +82,7 @@ text = "A chat clip replays a conversation with the AI, typed live."
 [[lines]]
 id = "flair.chat2"
 text = "Chained chat clips continue the same conversation."
+
+[[lines]]
+id = "flair.wand"
+text = "A wand clip steps through casts, one block at a time."

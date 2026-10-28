@@ -1,4 +1,4 @@
-import { interpolate, spring, useVideoConfig } from "remotion";
+import { Img, interpolate, spring, staticFile, useVideoConfig } from "remotion";
 import { useAccentColor, useThemeColors } from "../../calculate-metadata/theme";
 import { textStyles } from "../clip-style";
 import type { AnimatedListClipDef, ClipComponent } from "../types";
@@ -79,6 +79,7 @@ export const AnimatedListClip: ClipComponent<AnimatedListClipDef> = ({
         }}
       >
         {clip.items.map((item, i) => {
+        const entry = typeof item === "string" ? { text: item } : item;
         // spring() handles negative frames, but clamp anyway so the start
         // offset stays an explicit part of the math
         const progress = spring({
@@ -106,16 +107,23 @@ export const AnimatedListClip: ClipComponent<AnimatedListClipDef> = ({
               transform: `translateX(${translateX}px)`,
             }}
           >
-            <span
-              style={{
-                flexShrink: 0,
-                width: 14,
-                height: 14,
-                borderRadius: 7,
-                backgroundColor: bulletColor,
-              }}
-            />
-            <span>{item}</span>
+            {entry.icon ? (
+              <Img
+                src={staticFile(`shared/noita-spells/${entry.icon}`)}
+                style={{ width: 44, height: 44, flexShrink: 0 }}
+              />
+            ) : (
+              <span
+                style={{
+                  flexShrink: 0,
+                  width: 14,
+                  height: 14,
+                  borderRadius: 7,
+                  backgroundColor: bulletColor,
+                }}
+              />
+            )}
+            <span>{entry.text}</span>
           </div>
         );
         })}

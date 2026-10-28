@@ -42,3 +42,7 @@ text = "Notifications pop in for quick beats."
 [[lines]]
 id = "gallery.countdown"
 text = "And a countdown can hold the timeline until it finishes."
+
+[[lines]]
+id = "gallery.wand"
+text = "A wand clip steps through casts along a slot vector."

@@ -251,6 +251,28 @@ const flairClips: Storyboard["clips"] = [
     startAt: { line: "flair.chat2" },
     endAt: [{ line: "flair.chat2", end: true }],
   },
+  {
+    // Wand: a Noita-style slot vector stepping through casts
+    id: "wand-1",
+    type: "wand",
+    steps: [
+      { consume: [1], cursor: 2, note: "cast 1: plain orb" },
+      { consume: [2, 3], cursor: 4, note: "cast 2: speedy bounce" },
+      { consume: [4, 5, 6], cursor: 1, note: "cast 3: the big one", wrap: true },
+    ],
+    slots: [
+      { icon: "Spell_slow_bullet.webp", label: "orb" },
+      { icon: "Spell_speed.webp", label: "speed" },
+      { icon: "Spell_rubber_ball.webp", label: "bounce" },
+      { icon: "Spell_damage.webp", label: "dmg+" },
+      { icon: "Spell_fire_trail.webp", label: "trail" },
+      { icon: "Spell_light_bullet.webp", label: "bolt" },
+    ],
+    rect: rects.large,
+    transitionIn: 15,
+    startAt: { line: "flair.wand" },
+    endAt: [{ line: "flair.wand", end: true }],
+  },
 ];
 
 export const storyboard: Storyboard = {

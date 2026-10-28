@@ -119,3 +119,17 @@ inside the narration line's window; the clip holds on the final state.
 
 Prefer short original quotes for user steps (the typing IS the scene); AI
 steps take excerpts or summaries when the real reply is long.
+
+## `wand` — Noita-style slot vector
+
+A row of spell slots (icons from `public/shared/noita-spells/`, or text
+labels, or `empty` gaps) with a cursor bracket, stepping through casts.
+Steps: `{ consume: [slots lit this cast, 1-based], cursor: resting slot,
+note, wrap }`; slots: `{ icon, label, empty }`. Icons are abstract —
+always pair them with `label`. Steps auto-distribute across the clip
+window (`stepInterval`, default 60, compressed to fit). Slot numbers are
+1-based, matching the narration ("一号位"). Used for the Noita wand
+example, stepping cards, the Eval bug, sparse wands, grouping.
+
+`animated-list` items also accept `{ icon, text }` objects (icon legend
+lists) in addition to plain strings.

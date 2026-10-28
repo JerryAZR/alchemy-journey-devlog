@@ -125,6 +125,7 @@ describe("smoke: kitchen-sink fixture render", () => {
     const overlayLine = line("showcase.overlay");
     const cinematicLine = line("more.cinematic");
     const listLine = line("more.list");
+    const wandLine = line("flair.wand");
     const progressLine = line("more.progress");
     const countdownLine = line("fence.countdown");
     const chapterLine = line("flair.chapter");
@@ -149,6 +150,8 @@ describe("smoke: kitchen-sink fixture render", () => {
       cinematicMid: cinematicLine.startFrame + 60,
       // After the pane fade + first item's reveal, but before the last item starts
       listEarly: listLine.startFrame + 35,
+      // Mid cast 2: cells 2-3 lit, cursor sliding to cell 4
+      wandMid: wandLine.startFrame + 70,
       listLate: listLine.endFrame - 5,
       progressMid: progressLine.startFrame + 45,
       countdownMid: countdownLine.startFrame + 45,

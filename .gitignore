@@ -12,3 +12,4 @@ public/**/voiceover/
 
 # Local TTS provider config (may hold an API key)
 tts.config.toml
+asset-src/

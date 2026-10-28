@@ -162,11 +162,49 @@ export type CinematicTitleClipDef = ClipCommon & {
   subtitle?: string;
 };
 
+export type AnimatedListItem =
+  | string
+  | {
+      /** Icon in public/shared/noita-spells/ (full filename) */
+      icon?: string;
+      text: string;
+    };
+
 export type AnimatedListClipDef = ClipCommon & {
   type: "animated-list";
-  items: string[];
+  items: AnimatedListItem[];
   /** Frames between consecutive items appearing (default 15) */
   stagger?: number;
+};
+
+export type WandSlot = {
+  /** Icon in public/shared/noita-spells/ (full filename); omit for a text-only cell */
+  icon?: string;
+  /** Small label inside the cell, e.g. "6" or "Eval(2)" - icons are abstract, always pair them with labels */
+  label?: string;
+  /** A gap in the vector (sparse-wand examples) */
+  empty?: boolean;
+};
+
+export type WandStep = {
+  /** Slots consumed by this cast (1-based, highlighted in order) */
+  consume?: number[];
+  /** Slot the cursor rests on after this cast (1-based) */
+  cursor: number;
+  /** Caption under the wand, e.g. "第一次施放：6 点伤害" */
+  note?: string;
+  /** Draw the wrap-around arc (the scan crossed the vector end) */
+  wrap?: boolean;
+};
+
+export type WandClipDef = ClipCommon & {
+  type: "wand";
+  slots: WandSlot[];
+  steps: WandStep[];
+  /** Where the cursor rests before the first step (1-based, default 1) */
+  initialCursor?: number;
+  /** Frames between step morphs (default 60, compressed to fit the window) */
+  stepInterval?: number;
 };
 
 export type ProgressItem = {
@@ -233,6 +271,7 @@ export type StoryboardClip =
   | OverlayClipDef
   | CinematicTitleClipDef
   | AnimatedListClipDef
+  | WandClipDef
   | ProgressClipDef
   | CountdownClipDef
   | ChapterTitleClipDef
