@@ -1,3 +1,4 @@
+// 法术侧的目标角色
 /// A target *role*, resolved to concrete units at application time.
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub enum TargetSpec {
@@ -7,7 +8,7 @@ pub enum TargetSpec {
     Everyone,
 }
 
-#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+// 法术侧的指令:Chosen 被特殊处理成一条单独的指令
 pub enum Instruction {
     /// This cast applies up to N atoms (the default is 1). Potions lower
     /// with their exact atom count; "evaluate all" needs no special case.
@@ -20,11 +21,10 @@ pub enum Instruction {
     Apply(Atom),
 }
 
-/// Potion authoring type. The invariants (flat, single scope, predefined
-/// order) are enforced here, at the authoring layer, not in the executor.
-#[derive(Clone, Debug, PartialEq)]
-pub struct PotionDef {
-    pub scope: Scope,
-    pub effects: Vec<Atom>,
+// 药水侧的范围:同一个概念,另一种写法
+pub enum Scope {
+    /// The drinker.
+    Caster,
+    /// One chosen unit; the player picks the target at play time.
+    OneUnit,
 }
-

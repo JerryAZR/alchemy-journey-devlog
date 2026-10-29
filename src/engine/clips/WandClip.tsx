@@ -104,11 +104,26 @@ export const WandClip: ClipComponent<WandClipDef> = ({ clip }) => {
         {/* cells (slot numbers sit in the top-left corner, clear of the wrap arc) */}
         {clip.slots.map((slot, i) => {
           const consumeIndex = step?.consume?.indexOf(i + 1) ?? -1;
+          // Scanned cells light first (the walk), then consumed cells
+          const scanIndex = step?.scan?.indexOf(i + 1) ?? -1;
+          const scanCount = step?.scan?.length ?? 0;
           const lit =
             consumeIndex >= 0
               ? interpolate(
                   stepFrame,
-                  [consumeIndex * CONSUME_STAGGER, consumeIndex * CONSUME_STAGGER + CELL_POP],
+                  [
+                    (scanCount + consumeIndex) * CONSUME_STAGGER,
+                    (scanCount + consumeIndex) * CONSUME_STAGGER + CELL_POP,
+                  ],
+                  [0, 1],
+                  { extrapolateLeft: "clamp", extrapolateRight: "clamp" },
+                )
+              : 0;
+          const scanned =
+            scanIndex >= 0
+              ? interpolate(
+                  stepFrame,
+                  [scanIndex * CONSUME_STAGGER, scanIndex * CONSUME_STAGGER + CELL_POP],
                   [0, 1],
                   { extrapolateLeft: "clamp", extrapolateRight: "clamp" },
                 )
@@ -127,8 +142,8 @@ export const WandClip: ClipComponent<WandClipDef> = ({ clip }) => {
                   ? "transparent"
                   : `color-mix(in srgb, ${cardBg} 88%, ${accent} ${Math.round(lit * 12)}%)`,
                 border: slot.empty
-                  ? `2px dashed ${dimColor}`
-                  : `2px solid ${lit > 0 ? accent : borderColor}`,
+                  ? `2px dashed ${scanned > 0 ? accent : dimColor}`
+                  : `2px solid ${lit > 0 ? accent : scanned > 0.5 ? mix(0.5, cardBg, accent) : borderColor}`,
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "center",
@@ -166,6 +181,21 @@ export const WandClip: ClipComponent<WandClipDef> = ({ clip }) => {
               >
                 {i + 1}
               </div>
+              {/* per-node energy cost (universal ⚡ energy convention) */}
+              {slot.cost !== undefined ? (
+                <div
+                  style={{
+                    position: "absolute",
+                    top: 6,
+                    right: 10,
+                    fontFamily: codeFontFamily,
+                    fontSize: 16,
+                    color: "#f5c542",
+                  }}
+                >
+                  ⚡{slot.cost}
+                </div>
+              ) : null}
             </div>
           );
         })}

@@ -68,7 +68,9 @@ export const Episode: React.FC<EpisodeProps> = ({
               />
             ) : null}
             <ClipRenderer timeline={timeline} clipComponents={clipComponents} />
-            {module.storyboard.subtitles ? (
+            {/* Subtitles are the default (the script is the master clock);
+                storyboard.subtitles === false opts out explicitly */}
+            {module.storyboard.subtitles !== false ? (
               <SubtitleBand lines={timeline.lines} />
             ) : null}
           </AbsoluteFill>

@@ -4,6 +4,14 @@
 # ---- Part 1: what we're building (player's view) ----
 
 [[lines]]
+id = "open.recap"
+text = "上一集，我们把战斗核心拆成了独立的纯 Rust 包，设计裁决写进了文档。"
+
+[[lines]]
+id = "open.this"
+text = "这一集，卡牌要有真正的效果了：伤害、格挡、靶向，以及整个游戏最关键的一块——评估器。"
+
+[[lines]]
 id = "open.1"
 text = "首先我和AI讨论清楚了，这个类Noita的法杖系统到底应该怎么在卡牌游戏里面去实现。"
 

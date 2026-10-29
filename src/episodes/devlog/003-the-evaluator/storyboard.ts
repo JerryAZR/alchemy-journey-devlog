@@ -24,6 +24,21 @@ export const storyboard: Storyboard = {
       title: "评估器",
       subtitle: "炼金之旅 Devlog 03 · 效果与评审",
       rect: rects.full,
+      startAt: { line: "open.recap" },
+      endAt: [{ line: "open.this", end: true }],
+    },
+    {
+      // 开题句的画面：我们的答案——一张三格法术牌
+      id: "strike-teaser",
+      type: "wand",
+      slots: [
+        { icon: "Spell_light_bullet.webp", label: "6 伤害", cost: 1 },
+        { icon: "Spell_light_bullet.webp", label: "9 伤害", cost: 1 },
+        { icon: "Spell_light_bullet.webp", label: "15 伤害", cost: 2 },
+      ],
+      steps: [{ cursor: 1, note: "法术牌 = 一格一格执行的指令向量" }],
+      rect: { x: "8%", y: "24%", w: "84%", h: "52%" },
+      transitionIn: 15,
       startAt: { line: "open.1" },
       endAt: [{ line: "open.1", end: true }],
     },
@@ -46,7 +61,7 @@ export const storyboard: Storyboard = {
       steps: [{ cursor: 1, note: "一根六格法杖" }],
       rect: { x: "8%", y: "24%", w: "84%", h: "52%" },
       transitionIn: 15,
-      startAt: { line: "noita.config" },
+      startAt: { line: "noita.intro" },
       endAt: [{ line: "noita.config", end: true }],
     },
     {
@@ -125,9 +140,9 @@ export const storyboard: Storyboard = {
       id: "strike-wand",
       type: "wand",
       slots: [
-        { icon: "Spell_light_bullet.webp", label: "6 伤害" },
-        { icon: "Spell_light_bullet.webp", label: "9 伤害" },
-        { icon: "Spell_light_bullet.webp", label: "15 伤害" },
+        { icon: "Spell_light_bullet.webp", label: "6 伤害", cost: 1 },
+        { icon: "Spell_light_bullet.webp", label: "9 伤害", cost: 1 },
+        { icon: "Spell_light_bullet.webp", label: "15 伤害", cost: 2 },
       ],
       steps: [
         { cursor: 1, note: "打击法术：三格向量" },
@@ -145,16 +160,16 @@ export const storyboard: Storyboard = {
 
     // ---- potion ----
     {
-      // 20 伤害药水:PotionDef lowering => [Eval(1), Damage(20)],整瓶一次施放
+      // 双段效果药水:两个格子同时点亮,整瓶一次施放(不在此引入 Eval 术语)
       id: "potion-wand",
       type: "wand",
       slots: [
-        { icon: "Spell_burst_2.webp", label: "Eval(1)" },
-        { icon: "Spell_light_bullet.webp", label: "20 伤害" },
+        { icon: "Spell_light_bullet.webp", label: "伤害 10" },
+        { icon: "Spell_light_bullet.webp", label: "伤害 10" },
       ],
       steps: [
-        { cursor: 1, note: "药水 lowering 成同一个指令向量" },
-        { consume: [1, 2], cursor: 1, wrap: true, note: "零费,整瓶一次施放,用后消耗" },
+        { cursor: 1, note: "药水 = 一小段效果" },
+        { consume: [1, 2], cursor: 1, wrap: true, note: "整瓶一次施放 · 零费 · 用后移除" },
       ],
       stepInterval: 110,
       rect: { x: "8%", y: "24%", w: "84%", h: "52%" },
@@ -209,6 +224,18 @@ export const storyboard: Storyboard = {
 
     // ---- the tree we didn't build ----
     {
+      // 方案写在设计文档里(DESIGN.md 初稿真实文本,39562a5)
+      id: "tree-doc",
+      type: "code",
+      steps: ["tree-proposal.md"],
+      filename: "DESIGN.md 初稿 · 10-24",
+      paneTitle: "证物",
+      rect: rects.xl,
+      transitionIn: 15,
+      startAt: { line: "tree.proposal" },
+      endAt: [{ line: "tree.proposal", end: true }],
+    },
+    {
       id: "tree-ir",
       type: "code",
       steps: ["tree-ir.rs"],
@@ -216,7 +243,7 @@ export const storyboard: Storyboard = {
       paneTitle: "证物",
       rect: rects.xl,
       transitionIn: 15,
-      startAt: { line: "tree.proposal" },
+      startAt: { line: "tree.nodes" },
       endAt: [{ line: "tree.textbook", end: true }],
     },
     {
@@ -240,7 +267,7 @@ export const storyboard: Storyboard = {
       type: "wand",
       slots: [
         { icon: "Spell_energy_shield.webp", label: "护盾 5" },
-        { icon: "Spell_damage.webp", label: "护盾×2" },
+        { label: "护盾×2" },
         { icon: "Spell_energy_shield.webp", label: "护盾 5" },
       ],
       steps: [{ cursor: 1, note: "插入增幅:向量只多一格,树要重搭" }],
@@ -322,6 +349,10 @@ export const storyboard: Storyboard = {
           role: "user",
           text: "Even before I start reading the code, \"All in crates/combat/src/lib.rs\" is a red flag. How many responsibilities does that single file have?",
         },
+        {
+          role: "ai",
+          text: "Fair catch - eight distinct responsibilities. ~900 lines doing the jobs of five modules. Proposed split: wire / effect / state / engine / content, with flat re-exports at the root.",
+        },
       ],
       rect: rects.xl,
       transitionIn: 15,
@@ -350,6 +381,19 @@ export const storyboard: Storyboard = {
       rect: rects.xl,
       transitionIn: 15,
       startAt: { line: "conserve.rule" },
+      endAt: [{ line: "conserve.future", end: true }],
+    },
+    {
+      // AI 的“合理规则”迷思(评论性枚举)
+      id: "conserve-list",
+      type: "animated-list",
+      items: [
+        "实现功能时,顺手加上它觉得合理的规则或限制",
+        "它觉得“常见”的规则未必常见:杀戮尖塔能在战斗中生成牌",
+      ],
+      rect: rects.large,
+      transitionIn: 15,
+      startAt: { line: "conserve.habit" },
       endAt: [{ line: "conserve.sts", end: true }],
     },
     {
@@ -358,7 +402,7 @@ export const storyboard: Storyboard = {
       type: "code",
       steps: ["scope-before.rs", "scope-after.rs"],
       filename: "effect.rs",
-      paneTitle: "统一前后",
+      paneTitle: "法术侧 × 药水侧",
       rect: rects.xl,
       transitionIn: 15,
       startAt: { line: "scope.dup" },
@@ -366,6 +410,8 @@ export const storyboard: Storyboard = {
     },
 
     // ---- the evaluator ----
+    // 注:loop-old 只标 i>=;budget=n 与 applied>=budget 的含义在后续场景由
+    // 对话和 wand 演示承担,不在此预标
     {
       id: "eval-title",
       type: "chapter-title",
@@ -377,7 +423,7 @@ export const storyboard: Storyboard = {
       endAt: [{ line: "eval.intro", end: true }],
     },
     {
-      // 第一版循环:不可能的 \">=\"、budget=n、只在 Apply 处停(全部 mark)
+      // 第一版循环:只标不可能的 \">=\"(其余焦点在后续场景)
       id: "loop-old",
       type: "code",
       key: "eval-loop",
@@ -387,7 +433,7 @@ export const storyboard: Storyboard = {
       rect: rects.xl,
       transitionIn: 15,
       startAt: { line: "defense.bug" },
-      endAt: [{ line: "defense.hide", end: true }],
+      endAt: [{ line: "defense.name", end: true }],
     },
     {
       id: "defense-list",
@@ -396,6 +442,8 @@ export const storyboard: Storyboard = {
         "前提破了?写成条件执行,跳过逻辑,程序继续跑",
         "输入非法?给一个看似合理的默认值,程序继续跑",
         "同一个问题:要假装没发现,继续运行吗?",
+        "错误状态继续运行 → 行为不可预测,可能数据损坏",
+        "几百步后在无关的地方报错 → 定位成本暴增",
       ],
       rect: rects.large,
       transitionIn: 15,
@@ -414,17 +462,30 @@ export const storyboard: Storyboard = {
       endAt: [{ line: "defense.name", end: true }],
     },
     {
-      // 无上限循环:同一证物卡,换个焦点继续讲(内容延续)
+      // 无上限循环:标出 loop 本体
       id: "loop-old-2",
       type: "code",
       key: "eval-loop",
-      steps: ["loop-old.rs"],
+      steps: ["loop-old-unbounded.rs"],
       filename: "评估循环 · 第一版",
       paneTitle: "证物",
       rect: rects.xl,
       transitionIn: 15,
       startAt: { line: "loop.bug" },
-      endAt: [{ line: "loop.ai", end: true }],
+      endAt: [{ line: "loop.bug", end: true }],
+    },
+    {
+      // 古法 vs AI 时代(过程性对比,枚举)
+      id: "loop-list",
+      type: "animated-list",
+      items: [
+        "古法编程:程序超过预期时间没响应 → 人工怀疑死循环,强停排查",
+        "AI 时代:前台工具调用里的死循环 = 连 agent 一起挂起",
+      ],
+      rect: rects.large,
+      transitionIn: 15,
+      startAt: { line: "loop.old" },
+      endAt: [{ line: "sem.intro", end: true }],
     },
 
     // ---- Eval semantics: intent mismatch, then the stack collapse ----
@@ -437,6 +498,10 @@ export const storyboard: Storyboard = {
         {
           role: "user",
           text: "Eval setting budget = n. I didn't think of it as \"evaluate N steps\". I was thinking of \"grouping the next N blocks, treating them as one\".",
+        },
+        {
+          role: "ai",
+          text: "Your mental model is grouping - Noita's actual multicast semantics. Mine was \"set this cast's budget to N atoms\", which doesn't compose. And the kicker: grouping needs no tree in the evaluator.",
         },
       ],
       rect: rects.xl,
@@ -453,6 +518,10 @@ export const storyboard: Storyboard = {
         {
           role: "user",
           text: "Your quotas: Vec<u32>, for what we have now - isn't it different from just adding N-1 to budget at Eval(N)? This Vec<u32> quota overengineering isn't helping.",
+        },
+        {
+          role: "ai",
+          text: "Confirmed - you can prove it. Spending is always innermost and addition commutes: the stack is a single counter wearing a costume. Collapsing to budget = budget - 1 + n; the stack stays as an explanatory device, not code.",
         },
       ],
       rect: rects.xl,
@@ -475,7 +544,7 @@ export const storyboard: Storyboard = {
       endAt: [{ line: "bug.result", end: true }],
     },
     {
-      // [伤害, Eval(2), 伤害, 伤害]:应该
+      // [伤害, Eval(2), 伤害, 伤害]:正确语义下的两发
       id: "bug-wand-ok",
       type: "wand",
       slots: [
@@ -485,8 +554,10 @@ export const storyboard: Storyboard = {
         { icon: "Spell_light_bullet.webp", label: "伤害" },
       ],
       steps: [
-        { consume: [1], cursor: 2, note: "应该：第一次施放打 1 次，停在 2 号位" },
+        { consume: [1], cursor: 2, note: "第一发:打 1 次,停在 2 号位" },
+        { consume: [2, 3, 4], cursor: 1, wrap: true, note: "第二发:多重施放把后两格包成一发" },
       ],
+      stepInterval: 150,
       rect: { x: "8%", y: "24%", w: "84%", h: "52%" },
       transitionIn: 15,
       startAt: { line: "bug.example" },
@@ -511,13 +582,12 @@ export const storyboard: Storyboard = {
       endAt: [{ line: "bug.mechanism", end: true }],
     },
     {
-      // 修复:耗尽即停,停在下一格(HEAD 真实代码,single break)
+      // 修复:耗尽即停,停在下一格(历史中间态 a64a51c:计数器+slot-0 绕回,无费用)
       id: "loop-new",
       type: "code",
       key: "eval-loop",
-      steps: ["loop-new.rs"],
+      steps: ["loop-mid.rs"],
       filename: "评估循环 · 修复后",
-      paneTitle: "修复",
       rect: rects.xl,
       transitionIn: 15,
       startAt: { line: "fix.stop" },
@@ -526,20 +596,49 @@ export const storyboard: Storyboard = {
 
     // ---- wrap counting ----
     {
-      // 绕回演示:打击法术绕回
+      // 有界绕回:Eval(3) + 两个伤害,次数没用完 → 绕回开头(Eval 非 2,用文字格)
       id: "wrap-how",
       type: "wand",
       slots: [
-        { icon: "Spell_light_bullet.webp", label: "6 伤害" },
-        { icon: "Spell_light_bullet.webp", label: "9 伤害" },
-        { icon: "Spell_light_bullet.webp", label: "15 伤害" },
+        { label: "Eval(3)" },
+        { icon: "Spell_light_bullet.webp", label: "伤害" },
+        { icon: "Spell_light_bullet.webp", label: "伤害" },
       ],
       steps: [
-        { consume: [3], cursor: 1, wrap: true, note: "走到末尾还有次数:绕回开头继续" },
+        { consume: [1, 2, 3], cursor: 1, wrap: true, note: "走到末尾还有剩余次数:绕回开头继续" },
       ],
       rect: { x: "8%", y: "24%", w: "84%", h: "52%" },
       transitionIn: 15,
       startAt: { line: "wrap.how" },
+      endAt: [{ line: "wrap.how", end: true }],
+    },
+    {
+      // 无限循环种子:Eval(2) + 伤害
+      id: "wrap-infinite",
+      type: "wand",
+      slots: [
+        { icon: "Spell_burst_2.webp", label: "Eval(2)" },
+        { icon: "Spell_light_bullet.webp", label: "伤害" },
+      ],
+      steps: [
+        { consume: [1, 2], cursor: 1, wrap: true, note: "Eval(2) + 伤害:绕回" },
+        { consume: [1, 2], cursor: 1, wrap: true, note: "再绕回……没有上限就永远转下去" },
+      ],
+      stepInterval: 90,
+      rect: { x: "8%", y: "24%", w: "84%", h: "52%" },
+      startAt: { line: "wrap.infinite" },
+      endAt: [{ line: "wrap.infinite", end: true }],
+    },
+    {
+      // 绕回上限:CardDef.unwrap 字段(真实代码,mark)
+      id: "carddef-unwrap",
+      type: "code",
+      steps: ["carddef-unwrap.rs"],
+      filename: "state.rs · CardDef",
+      paneTitle: "绕回上限",
+      rect: rects.xl,
+      transitionIn: 15,
+      startAt: { line: "wrap.limit" },
       endAt: [{ line: "wrap.v1", end: true }],
     },
     {
@@ -570,7 +669,7 @@ export const storyboard: Storyboard = {
       ],
       steps: [
         { consume: [1], cursor: 2, note: "第一次施放：正常，指针停在 2 号位" },
-        { consume: [], cursor: 1, wrap: true, note: "第二次：路过 1 号位触发绕回上限，空放" },
+        { scan: [2, 3, 4], consume: [], cursor: 1, wrap: true, note: "第二次：扫过空格，路过 1 号位触发绕回上限，空放" },
       ],
       stepInterval: 80,
       rect: { x: "8%", y: "24%", w: "84%", h: "52%" },
@@ -589,7 +688,7 @@ export const storyboard: Storyboard = {
       ],
       initialCursor: 2,
       steps: [
-        { consume: [1], cursor: 2, note: "修复后：从起始点算圈数，正常打出 1 号位" },
+        { scan: [2, 3, 4], consume: [1], cursor: 2, wrap: true, note: "修复后：从起始点算圈数，扫过空格后正常打出" },
       ],
       rect: { x: "8%", y: "24%", w: "84%", h: "52%" },
       startAt: { line: "wrap.fix" },
@@ -616,20 +715,54 @@ export const storyboard: Storyboard = {
       ],
       rect: rects.xl,
       transitionIn: 15,
+      paneTitle: "评审进行中 · 10-26",
       startAt: { line: "test.rule" },
       endAt: [{ line: "test.filter", end: true }],
     },
 
     // ---- cost moves to the nodes ----
     {
-      id: "cost",
+      // 旧设计:固定费用字段(cost.field 一句,之后换示意图)
+      id: "cost-field",
       type: "code",
-      steps: ["cost-before.rs", "cost-after.rs"],
-      filename: "费用字段之死",
-      paneTitle: "设计变更",
+      steps: ["carddef.rs"],
+      filename: "state.rs · CardDef",
+      paneTitle: "旧设计",
       rect: rects.xl,
       transitionIn: 15,
       startAt: { line: "cost.field" },
+      endAt: [{ line: "cost.field", end: true }],
+    },
+    {
+      // “交替戳一下和终结技”说的就是它:三次施放价值都不同
+      id: "cost-why-wand",
+      type: "wand",
+      slots: [
+        { icon: "Spell_light_bullet.webp", label: "6 伤害", cost: 1 },
+        { icon: "Spell_light_bullet.webp", label: "9 伤害", cost: 1 },
+        { icon: "Spell_light_bullet.webp", label: "15 伤害", cost: 2 },
+      ],
+      steps: [{ cursor: 1, note: "同一张牌,每一发的价值都不同" }],
+      rect: { x: "8%", y: "24%", w: "84%", h: "52%" },
+      transitionIn: 15,
+      startAt: { line: "cost.unfair" },
+      endAt: [{ line: "cost.noita", end: true }],
+    },
+    {
+      // 费用在格子上:牌面显示下一次施放的费用
+      id: "cost-wand",
+      type: "wand",
+      slots: [
+        { icon: "Spell_light_bullet.webp", label: "6 伤害", cost: 1 },
+        { icon: "Spell_light_bullet.webp", label: "9 伤害", cost: 1 },
+        { icon: "Spell_light_bullet.webp", label: "15 伤害", cost: 2 },
+      ],
+      steps: [
+        { consume: [1], cursor: 2, note: "费用挪到节点上:这一次施放收 ⚡1" },
+      ],
+      rect: { x: "8%", y: "24%", w: "84%", h: "52%" },
+      transitionIn: 15,
+      startAt: { line: "cost.done" },
       endAt: [{ line: "cost.done", end: true }],
     },
 
@@ -654,6 +787,7 @@ export const storyboard: Storyboard = {
       ],
       rect: rects.xl,
       transitionIn: 15,
+      paneTitle: "定型后 · 28 个测试",
       startAt: { line: "result.tests" },
       endAt: [{ line: "result.tests", end: true }],
     },
@@ -669,11 +803,13 @@ export const storyboard: Storyboard = {
       endAt: [{ line: "result.lockstep", end: true }],
     },
     {
-      id: "starter",
+      // 评估器本体:所有修复落地后的最终形态(HEAD)
+      id: "loop-final",
       type: "code",
-      steps: ["starter.rs"],
-      filename: "content.rs",
-      paneTitle: "起步卡组",
+      key: "eval-loop",
+      steps: ["loop-final.rs"],
+      filename: "评估循环 · 最终",
+      paneTitle: "评估器本体",
       rect: rects.xl,
       transitionIn: 15,
       startAt: { line: "result.eval" },

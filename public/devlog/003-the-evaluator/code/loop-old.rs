@@ -14,8 +14,7 @@
         }
         match effects[i] {
             Instruction::Eval(n) => {
-                // !mark
-                budget = n;
+                    budget = n;
                 plan.steps.push(i);
             }
             Instruction::BindTarget(spec) => {
@@ -27,7 +26,6 @@
                 plan.steps.push(i);
             }
             Instruction::Apply(_) => {
-                // !mark
                 if applied >= budget {
                     break; // budget spent: cursor rests on this unconsumed instruction
                 }

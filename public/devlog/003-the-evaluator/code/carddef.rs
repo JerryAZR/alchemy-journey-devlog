@@ -2,6 +2,7 @@
 #[derive(Clone, Debug, PartialEq)]
 pub struct CardDef {
     pub name: String,
+    // !mark
     pub cost: u32,
     pub on_play: OnPlay,
     /// The flat effect program (DESIGN.md).
@@ -10,3 +11,5 @@ pub struct CardDef {
     /// most this many times (shared across any future triggered sub-casts).
     /// Default 0: every cell is still scanned once per play — the catch-up
     /// lap back to the start is not a wrap — but nothing is re-scanned.
+    pub unwrap: u8,
+}

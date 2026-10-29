@@ -20,3 +20,13 @@ for (const l of t.lines) {
 for (const c of t.clips) {
   console.log("clip", c.id, c.startFrame, c.endFrame);
 }
+// Every line needs a visual: warn when no clip is active at a line's start
+// (transition-in counts - a fading-in clip is already visible)
+for (const l of t.lines) {
+  const covered = t.clips.some(
+    (c) => c.startFrame < l.endFrame && c.endFrame > l.startFrame,
+  );
+  if (!covered) {
+    console.warn(`WARN line '${l.fullId}' has no clip covering it (black screen)`);
+  }
+}

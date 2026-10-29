@@ -182,6 +182,8 @@ export type WandSlot = {
   icon?: string;
   /** Small label inside the cell, e.g. "6" or "Eval(2)" - icons are abstract, always pair them with labels */
   label?: string;
+  /** Energy cost badge (top-right corner, universal ⚡ convention) */
+  cost?: number;
   /** A gap in the vector (sparse-wand examples) */
   empty?: boolean;
 };
@@ -189,6 +191,8 @@ export type WandSlot = {
 export type WandStep = {
   /** Slots consumed by this cast (1-based, highlighted in order) */
   consume?: number[];
+  /** Slots the scan walked over without consuming (1-based, dim highlight) */
+  scan?: number[];
   /** Slot the cursor rests on after this cast (1-based) */
   cursor: number;
   /** Caption under the wand, e.g. "第一次施放：6 点伤害" */
