@@ -7,7 +7,7 @@ import { useClipFrame } from "../useClipFrame";
 
 const CELL = 148;
 const GAP = 14;
-const NUMBER_H = 26;
+const ARC_H = 30;
 const BRACKET_H = 34;
 const NOTE_H = 44;
 /** Frames between consecutive consumed-cell highlights inside a step */
@@ -77,7 +77,7 @@ export const WandClip: ClipComponent<WandClipDef> = ({ clip }) => {
   const borderColor = mix(0.75, cardBg, textColor);
 
   const totalW = clip.slots.length * CELL + (clip.slots.length - 1) * GAP;
-  const totalH = NUMBER_H + CELL + BRACKET_H + NOTE_H;
+  const totalH = ARC_H + CELL + BRACKET_H + NOTE_H;
 
   // The cursor bracket slides between resting positions
   const cursorSlide = spring({
@@ -101,26 +101,7 @@ export const WandClip: ClipComponent<WandClipDef> = ({ clip }) => {
       }}
     >
       <div style={{ position: "relative", width: totalW, height: totalH }}>
-        {/* slot numbers (1-based, matching the narration) */}
-        {clip.slots.map((_, i) => (
-          <div
-            key={`n${i}`}
-            style={{
-              position: "absolute",
-              top: 0,
-              left: i * (CELL + GAP),
-              width: CELL,
-              textAlign: "center",
-              fontFamily: codeFontFamily,
-              fontSize: 17,
-              color: dimColor,
-            }}
-          >
-            {i + 1}
-          </div>
-        ))}
-
-        {/* cells */}
+        {/* cells (slot numbers sit in the top-left corner, clear of the wrap arc) */}
         {clip.slots.map((slot, i) => {
           const consumeIndex = step?.consume?.indexOf(i + 1) ?? -1;
           const lit =
@@ -137,7 +118,7 @@ export const WandClip: ClipComponent<WandClipDef> = ({ clip }) => {
               key={`c${i}`}
               style={{
                 position: "absolute",
-                top: NUMBER_H,
+                top: ARC_H,
                 left: i * (CELL + GAP),
                 width: CELL,
                 height: CELL,
@@ -172,6 +153,19 @@ export const WandClip: ClipComponent<WandClipDef> = ({ clip }) => {
                   {slot.label}
                 </div>
               ) : null}
+              {/* slot number (1-based, matching the narration) */}
+              <div
+                style={{
+                  position: "absolute",
+                  top: 6,
+                  left: 10,
+                  fontFamily: codeFontFamily,
+                  fontSize: 15,
+                  color: dimColor,
+                }}
+              >
+                {i + 1}
+              </div>
             </div>
           );
         })}
@@ -180,11 +174,11 @@ export const WandClip: ClipComponent<WandClipDef> = ({ clip }) => {
         {step?.wrap ? (
           <svg
             width={totalW}
-            height={NUMBER_H + 10}
-            style={{ position: "absolute", top: -8, left: 0 }}
+            height={ARC_H}
+            style={{ position: "absolute", top: 0, left: 0 }}
           >
             <path
-              d={`M ${(clip.slots.length - 0.5) * (CELL + GAP) - GAP} ${NUMBER_H + 6} C ${totalW * 0.7} -14, ${totalW * 0.3} -14, ${CELL / 2} ${NUMBER_H + 6}`}
+              d={`M ${(clip.slots.length - 0.5) * (CELL + GAP) - GAP} ${ARC_H - 2} C ${totalW * 0.7} -10, ${totalW * 0.3} -10, ${CELL / 2} ${ARC_H - 2}`}
               fill="none"
               stroke={accent}
               strokeWidth={2.5}
@@ -201,7 +195,7 @@ export const WandClip: ClipComponent<WandClipDef> = ({ clip }) => {
         <div
           style={{
             position: "absolute",
-            top: NUMBER_H + CELL + 8,
+            top: ARC_H + CELL + 8,
             left: cursorX * (CELL + GAP),
             width: CELL,
             height: 10,
@@ -218,7 +212,7 @@ export const WandClip: ClipComponent<WandClipDef> = ({ clip }) => {
             key={stepIndex}
             style={{
               position: "absolute",
-              top: NUMBER_H + CELL + BRACKET_H,
+              top: ARC_H + CELL + BRACKET_H,
               width: totalW,
               textAlign: "center",
               fontFamily: codeFontFamily,

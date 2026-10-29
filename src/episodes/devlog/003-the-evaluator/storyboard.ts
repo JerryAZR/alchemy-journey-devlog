@@ -29,8 +29,10 @@ export const storyboard: Storyboard = {
     },
 
     // ---- Part 1: Noita wand mechanics (the running example) ----
+    // 每次施放一个 clip（step 与台词严格对拍）；同一 rect、无 pane chrome，
+    // 首个之外的 clip 不 fade，画面连续。initialCursor 手动接上次的休息位。
     {
-      // 能量球-加速-弹跳球-伤害增幅-火焰轨迹-闪电箭,四次施放
+      // 能量球-加速-弹跳球-伤害增幅-火焰轨迹-闪电箭
       id: "noita-wand",
       type: "wand",
       slots: [
@@ -41,22 +43,85 @@ export const storyboard: Storyboard = {
         { icon: "Spell_fire_trail.webp", label: "火焰轨迹" },
         { icon: "Spell_light_bullet.webp", label: "闪电箭" },
       ],
-      steps: [
-        { cursor: 1, note: "一根六格法杖" },
-        { consume: [1], cursor: 2, note: "第一次施放：普通能量球" },
-        { consume: [2, 3], cursor: 4, note: "第二次：带加速的弹跳球" },
-        { consume: [4, 5, 6], cursor: 1, wrap: true, note: "第三次：增幅+火焰轨迹+闪电箭" },
-        { consume: [1], cursor: 2, note: "第四次：回到开头" },
-      ],
+      steps: [{ cursor: 1, note: "一根六格法杖" }],
       rect: { x: "8%", y: "24%", w: "84%", h: "52%" },
       transitionIn: 15,
       startAt: { line: "noita.config" },
+      endAt: [{ line: "noita.config", end: true }],
+    },
+    {
+      id: "noita-cast1",
+      type: "wand",
+      slots: [
+        { icon: "Spell_slow_bullet.webp", label: "能量球" },
+        { icon: "Spell_speed.webp", label: "加速" },
+        { icon: "Spell_rubber_ball.webp", label: "弹跳球" },
+        { icon: "Spell_damage.webp", label: "伤害增幅" },
+        { icon: "Spell_fire_trail.webp", label: "火焰轨迹" },
+        { icon: "Spell_light_bullet.webp", label: "闪电箭" },
+      ],
+      steps: [{ consume: [1], cursor: 2, note: "第一次施放：普通能量球" }],
+      rect: { x: "8%", y: "24%", w: "84%", h: "52%" },
+      startAt: { line: "noita.cast1" },
+      endAt: [{ line: "noita.cast1", end: true }],
+    },
+    {
+      id: "noita-cast2",
+      type: "wand",
+      slots: [
+        { icon: "Spell_slow_bullet.webp", label: "能量球" },
+        { icon: "Spell_speed.webp", label: "加速" },
+        { icon: "Spell_rubber_ball.webp", label: "弹跳球" },
+        { icon: "Spell_damage.webp", label: "伤害增幅" },
+        { icon: "Spell_fire_trail.webp", label: "火焰轨迹" },
+        { icon: "Spell_light_bullet.webp", label: "闪电箭" },
+      ],
+      initialCursor: 2,
+      steps: [{ consume: [2, 3], cursor: 4, note: "第二次：带加速的弹跳球" }],
+      rect: { x: "8%", y: "24%", w: "84%", h: "52%" },
+      startAt: { line: "noita.cast2" },
+      endAt: [{ line: "noita.cast2", end: true }],
+    },
+    {
+      id: "noita-cast3",
+      type: "wand",
+      slots: [
+        { icon: "Spell_slow_bullet.webp", label: "能量球" },
+        { icon: "Spell_speed.webp", label: "加速" },
+        { icon: "Spell_rubber_ball.webp", label: "弹跳球" },
+        { icon: "Spell_damage.webp", label: "伤害增幅" },
+        { icon: "Spell_fire_trail.webp", label: "火焰轨迹" },
+        { icon: "Spell_light_bullet.webp", label: "闪电箭" },
+      ],
+      initialCursor: 4,
+      steps: [
+        { consume: [4, 5, 6], cursor: 1, wrap: true, note: "第三次：增幅+火焰轨迹+闪电箭" },
+      ],
+      rect: { x: "8%", y: "24%", w: "84%", h: "52%" },
+      startAt: { line: "noita.cast3" },
+      endAt: [{ line: "noita.cast3", end: true }],
+    },
+    {
+      id: "noita-cast4",
+      type: "wand",
+      slots: [
+        { icon: "Spell_slow_bullet.webp", label: "能量球" },
+        { icon: "Spell_speed.webp", label: "加速" },
+        { icon: "Spell_rubber_ball.webp", label: "弹跳球" },
+        { icon: "Spell_damage.webp", label: "伤害增幅" },
+        { icon: "Spell_fire_trail.webp", label: "火焰轨迹" },
+        { icon: "Spell_light_bullet.webp", label: "闪电箭" },
+      ],
+      initialCursor: 1,
+      steps: [{ consume: [1], cursor: 2, note: "第四次：回到开头" }],
+      rect: { x: "8%", y: "24%", w: "84%", h: "52%" },
+      startAt: { line: "noita.cast4" },
       endAt: [{ line: "noita.cast4", end: true }],
     },
 
     // ---- our game: stepping cards ----
     {
-      // 打击药剂 6-9-15(content.rs 真实数值)
+      // 打击法术 6-9-15(content.rs 真实数值)
       id: "strike-wand",
       type: "wand",
       slots: [
@@ -65,11 +130,13 @@ export const storyboard: Storyboard = {
         { icon: "Spell_light_bullet.webp", label: "15 伤害" },
       ],
       steps: [
-        { cursor: 1, note: "打击药剂：三格向量" },
+        { cursor: 1, note: "打击法术：三格向量" },
         { consume: [1], cursor: 2, note: "第一次施放：6 点伤害，游标停在 2 号位" },
         { consume: [2], cursor: 3, note: "第二次：9 点伤害" },
         { consume: [3], cursor: 1, wrap: true, note: "第三次：15 点伤害，然后绕回" },
       ],
+      // 三次施放不被台词逐个点名，stepInterval 均匀铺开即可
+      stepInterval: 170,
       rect: { x: "8%", y: "24%", w: "84%", h: "52%" },
       transitionIn: 15,
       startAt: { line: "card.analogy" },
@@ -89,6 +156,7 @@ export const storyboard: Storyboard = {
         { cursor: 1, note: "药水 lowering 成同一个指令向量" },
         { consume: [1, 2], cursor: 1, wrap: true, note: "零费,整瓶一次施放,用后消耗" },
       ],
+      stepInterval: 110,
       rect: { x: "8%", y: "24%", w: "84%", h: "52%" },
       transitionIn: 15,
       startAt: { line: "potion.1" },
@@ -407,8 +475,8 @@ export const storyboard: Storyboard = {
       endAt: [{ line: "bug.result", end: true }],
     },
     {
-      // [伤害, Eval(2), 伤害, 伤害]:应该 vs 实际
-      id: "bug-wand",
+      // [伤害, Eval(2), 伤害, 伤害]:应该
+      id: "bug-wand-ok",
       type: "wand",
       slots: [
         { icon: "Spell_light_bullet.webp", label: "伤害" },
@@ -417,12 +485,29 @@ export const storyboard: Storyboard = {
         { icon: "Spell_light_bullet.webp", label: "伤害" },
       ],
       steps: [
-        { consume: [1], cursor: 2, note: "应该:第一次施放打 1 次,停在 2 号位" },
-        { consume: [1, 2, 3], cursor: 4, note: "实际:循环越过耗尽点,多打一次" },
+        { consume: [1], cursor: 2, note: "应该：第一次施放打 1 次，停在 2 号位" },
       ],
       rect: { x: "8%", y: "24%", w: "84%", h: "52%" },
       transitionIn: 15,
       startAt: { line: "bug.example" },
+      endAt: [{ line: "bug.example", end: true }],
+    },
+    {
+      // 实际：循环越过耗尽点，多打一次
+      id: "bug-wand-bug",
+      type: "wand",
+      slots: [
+        { icon: "Spell_light_bullet.webp", label: "伤害" },
+        { icon: "Spell_burst_2.webp", label: "Eval(2)" },
+        { icon: "Spell_light_bullet.webp", label: "伤害" },
+        { icon: "Spell_light_bullet.webp", label: "伤害" },
+      ],
+      initialCursor: 1,
+      steps: [
+        { consume: [1, 2, 3], cursor: 4, note: "实际：循环越过耗尽点，多打一次" },
+      ],
+      rect: { x: "8%", y: "24%", w: "84%", h: "52%" },
+      startAt: { line: "bug.mechanism" },
       endAt: [{ line: "bug.mechanism", end: true }],
     },
     {
@@ -441,7 +526,7 @@ export const storyboard: Storyboard = {
 
     // ---- wrap counting ----
     {
-      // 绕回演示:打击药剂绕回
+      // 绕回演示:打击法术绕回
       id: "wrap-how",
       type: "wand",
       slots: [
@@ -458,7 +543,7 @@ export const storyboard: Storyboard = {
       endAt: [{ line: "wrap.v1", end: true }],
     },
     {
-      // 稀疏法杖:4 格只装 1 个 -> 旧规则空放,新规则正常
+      // 稀疏法杖:4 格只装 1 个
       id: "wrap-sparse",
       type: "wand",
       slots: [
@@ -467,14 +552,47 @@ export const storyboard: Storyboard = {
         { empty: true },
         { empty: true },
       ],
-      steps: [
-        { consume: [1], cursor: 2, note: "第一次施放:正常,指针停在 2 号位" },
-        { consume: [], cursor: 1, wrap: true, note: "旧规则:路过 1 号位触发绕回上限,空放" },
-        { consume: [1], cursor: 2, note: "修复后:从本次起始点算圈数,正常打出" },
-      ],
+      steps: [{ cursor: 1, note: "4 格法杖，只在 1 号位装了效果" }],
       rect: { x: "8%", y: "24%", w: "84%", h: "52%" },
       transitionIn: 15,
       startAt: { line: "wrap.sparse" },
+      endAt: [{ line: "wrap.sparse", end: true }],
+    },
+    {
+      // 旧规则：第二发空放（同一行里两次施放，半步对拍即可）
+      id: "wrap-starve",
+      type: "wand",
+      slots: [
+        { icon: "Spell_light_bullet.webp", label: "伤害" },
+        { empty: true },
+        { empty: true },
+        { empty: true },
+      ],
+      steps: [
+        { consume: [1], cursor: 2, note: "第一次施放：正常，指针停在 2 号位" },
+        { consume: [], cursor: 1, wrap: true, note: "第二次：路过 1 号位触发绕回上限，空放" },
+      ],
+      stepInterval: 80,
+      rect: { x: "8%", y: "24%", w: "84%", h: "52%" },
+      startAt: { line: "wrap.starve" },
+      endAt: [{ line: "wrap.starve", end: true }],
+    },
+    {
+      // 修复后：从本次起始点算圈数，正常打出
+      id: "wrap-fixed",
+      type: "wand",
+      slots: [
+        { icon: "Spell_light_bullet.webp", label: "伤害" },
+        { empty: true },
+        { empty: true },
+        { empty: true },
+      ],
+      initialCursor: 2,
+      steps: [
+        { consume: [1], cursor: 2, note: "修复后：从起始点算圈数，正常打出 1 号位" },
+      ],
+      rect: { x: "8%", y: "24%", w: "84%", h: "52%" },
+      startAt: { line: "wrap.fix" },
       endAt: [{ line: "wrap.fix", end: true }],
     },
 
